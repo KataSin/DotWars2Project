@@ -1,7 +1,6 @@
 #include "Vector2.h"
 #include <cmath>
 #include <sstream>
-#include "Point.h"
 
 Vector2 Vector2::Zero = Vector2(0, 0);
 Vector2 Vector2::One = Vector2(1, 1);
@@ -159,19 +158,6 @@ void Vector2::Spring(Vector2 & position, Vector2 & velocity, const Vector2 & res
 	velocity = friction * (velocity + acceleration);
 	// ç¿ïWÇÃçXêV
 	position += velocity;
-}
-
-Point Vector2::ToPoint(const Vector2& v)
-{
-	Point result;
-	result.x = (int)v.x;
-	result.y = (int)v.y;
-	return result;
-}
-
-Point Vector2::ToPoint() const
-{
-	return ToPoint(*this);
 }
 
 Vector2& Vector2::operator = (const Vector2& v)
