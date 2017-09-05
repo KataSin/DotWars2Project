@@ -1,10 +1,27 @@
 #pragma once
+//モデルID
 enum MODEL_ID
 {
 	PLAYER_MODEL
 };
-
+//アニメーションモデル
+enum MODEL_ANIM_ID
+{
+	PLAYER_MODEL_ANIM
+};
+//モデルのモーションID
+enum MODEL_MOTION_ID
+{
+	NULL_MOTION=9999,
+	PLAYER_WALK=0,
+	PLAYER_RUN
+};
 enum SPRITE_ID
 {
+	TEST_SPRITE
+};
 
+enum SPRITE_ANIM_ID
+{
+	TEST_SPRITE_ANIM
 };
