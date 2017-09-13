@@ -25,3 +25,9 @@ enum SPRITE_ANIM_ID
 {
 	TEST_SPRITE_ANIM
 };
+
+enum SOUND_ID {
+	TEST_BGM,
+	TEST_SE,
+	TEST3D_SE
+};

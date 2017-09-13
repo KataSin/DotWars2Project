@@ -74,7 +74,7 @@ void ModelAnim::ModelAnimHandle::StopAnim()
 
 void ModelAnim::ModelAnimHandle::ChangeAnim(const MODEL_MOTION_ID & motionId)
 {
-	if (isLerpAnim)return;
+	if (isLerpAnim || (CurMotionId == motionId))return;
 	isLerpAnim = true;
 	Attach(motionId);
 	CurMotionId = motionId;

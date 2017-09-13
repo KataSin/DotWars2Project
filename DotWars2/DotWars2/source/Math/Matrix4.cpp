@@ -342,7 +342,7 @@ Vector3 Matrix4::GetUp(const Matrix4& m)
 Vector3 Matrix4::GetFront(const Matrix4& m)
 {
 	Vector3 result = { m.m[2][0], m.m[2][1], m.m[2][2] };
-	return result;
+	return -result;
 }
 
 Vector3 Matrix4::GetScale(const Matrix4& m)
