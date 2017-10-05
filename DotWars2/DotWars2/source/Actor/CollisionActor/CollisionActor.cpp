@@ -1,10 +1,11 @@
 #include "CollisionActor.h"
-#include "../ActorID.h"
+#include "Collision\Collision.h"
+
 #include <algorithm>
 #include <functional>
 CollisionActor::CollisionActor()
 {
-	m_Cols[COL_ID::PLAYER_ENEMY_COL] = std::bind(&CollisionActor::Player_Enemy_Col);
+	m_Cols[COL_ID::PLAYER_ENEMY_COL] = &(CollisionActor::Player_Enemy_Col);
 }
 
 CollisionActor::~CollisionActor()
@@ -12,17 +13,17 @@ CollisionActor::~CollisionActor()
 	m_Cols.clear();
 }
 
-CollisionParameter CollisionActor::Player_Enemy_Col(Actor & actor1, Actor & actor2)
+CollisionParameter CollisionActor::Player_Enemy_Col(const Actor & actor1, const Actor & actor2)
 {
 	CollisionParameter colpara;
 	//プレイヤー
 	Sphere player;
 	player.position = actor1.GetParameter().mat.GetPosition();
-	player.radius = 2.0f;
+	player.radius = 20.0f;
 	//エネミー
 	Sphere enemy;
 	enemy.position = actor2.GetParameter().mat.GetPosition();
-	enemy.radius = 2.0f;
+	enemy.radius = 20.0f;
 
 	colpara.colID = COL_ID::PLAYER_ENEMY_COL;
 	colpara = Collisin::GetInstace().SphereSphere(player, enemy);
@@ -30,7 +31,7 @@ CollisionParameter CollisionActor::Player_Enemy_Col(Actor & actor1, Actor & acto
 	return colpara;
 }
 
-std::unordered_map<COL_ID, std::function<CollisionParameter>> CollisionActor::GetCols()
+std::unordered_map<COL_ID, std::function<CollisionParameter(const Actor & actor1, const Actor & actor2)>> CollisionActor::GetCols()
 {
 	return m_Cols;
 }

@@ -14,14 +14,14 @@ public:
 	/// <param name="actor1">プレイヤー</param>
 	/// <param name="actor2">エネミー</param>
 	/// <returns>コリジョンパラメーター</returns>
-	CollisionParameter Player_Enemy_Col(Actor & actor1, Actor & actor2);
+	static CollisionParameter Player_Enemy_Col(const Actor & actor1, const Actor & actor2);
 	/// <summary>
 	/// コリジョン情報を取得
 	/// </summary>
 	/// <returns>コリジョン情報</returns>
-	std::unordered_map<COL_ID, std::function<CollisionParameter>> GetCols();
+	std::unordered_map<COL_ID, std::function<CollisionParameter(const Actor & actor1, const Actor & actor2)>> GetCols();
 	
 private:
-	std::unordered_map<COL_ID, std::function<CollisionParameter>> m_Cols;
+	std::unordered_map<COL_ID, std::function<CollisionParameter(const Actor & actor1, const Actor & actor2)>> m_Cols;
 
 };

@@ -1,8 +1,12 @@
 #include "World.h"
+#include "../../Actor/CollisionActor/CollisionActor.h"
 #include "../WorldManager/WorldManager.h"
 #include <algorithm>
 World::World(WorldManagerPtr manager)
 {
+	//ƒRƒŠƒWƒ‡ƒ“î•ñ‚ð“ü‚ê‚é
+	CollisionActor colAc;
+	m_Cols = colAc.GetCols();
 }
 
 World::~World()
@@ -16,7 +20,6 @@ void World::Update()
 	}
 	
 }
-
 void World::Draw() const
 {
 	for (const auto& i : mActors) {
@@ -27,6 +30,16 @@ void World::Draw() const
 void World::Add(const ACTOR_ID & id, ActorPtr actor)
 {
 	mActors[id].Add(actor);
+}
+
+void World::Collision(const ACTOR_ID & id, const COL_ID & colId,Actor & actor)
+{
+	for (const auto& i : FindActors(id)) {
+		if (m_Cols[colId](*i, actor).colFlag) {
+			i->Collision(actor);
+			actor.Collision(*i);
+		}
+	}
 }
 
 std::list<ActorPtr> World::FindActors(const ACTOR_ID& id)

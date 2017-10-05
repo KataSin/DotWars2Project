@@ -35,6 +35,11 @@ public:
 	/// </summary>
 	virtual void Draw() const = 0;
 	/// <summary>
+	///	当たり判定
+	/// </summary>
+	/// <param name="other">当たったオブジェクト</param>
+	virtual void Collision(Actor& other) = 0;
+	/// <summary>
 	///	死んでいるか取得
 	/// </summary>
 	/// <returns>死んでいるかフラグ</returns>
@@ -46,4 +51,5 @@ public:
 	Parameter GetParameter() const;
 protected:
 	Parameter mParameter;
+	IWorld& mWorld;
 };

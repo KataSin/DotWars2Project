@@ -1,6 +1,7 @@
 #include "Actor.h"
 
-Actor::Actor(IWorld & world)
+Actor::Actor(IWorld & world):
+	mWorld(world)
 {
 	mParameter.isDead = false;
 	mParameter.mat = Matrix4::Identity;
