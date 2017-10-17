@@ -33,9 +33,9 @@ public:
 	/// 終わったら呼ばれる
 	/// </summary>
 	void End();
-
-
-	//テスト
 private:
-	WorldManagerPtr manager;
+	//ワールドポインター
+	WorldManagerPtr mWorldManager;
+	//シーンマネージャー
+	SceneManagerPtr mSceneManager;
 };

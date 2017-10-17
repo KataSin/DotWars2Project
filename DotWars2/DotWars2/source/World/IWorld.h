@@ -36,4 +36,8 @@ public:
 	/// <param name="id">アクターID</param>
 	/// <returns>カウント</returns>
 	virtual int ActorsCount(const ACTOR_ID& id) = 0;
+	/// <summary>
+	/// ワールドをクリアー
+	/// </summary>
+	virtual void Clear() = 0;
 };

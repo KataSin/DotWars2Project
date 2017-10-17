@@ -6,8 +6,8 @@
 class WorldManager {
 public:
 	struct WorldState {
-		WorldPtr world;
-		bool isStop;
+		WorldPtr world; //ワールド
+		bool isStop;    //止まっているかどうか
 	};
 
 
@@ -25,9 +25,18 @@ public:
 	void Draw() const;
 	/// <summary>
 	/// <summary>
-	/// ワールドをクリア
+	/// ワールドマネージャーをクリア
 	/// </summary>
-	void Clear();
+	void ManagerClear();
+	/// <summary>
+	/// ワールドをクリアー
+	/// </summary>
+	void WorldAllClear();
+	/// <summary>
+	/// 指定したワールドをクリアー
+	/// </summary>
+	/// <param name="id"></param>
+	void WorldClear(const WORLD_ID& id);
 	/// <summary>
 	/// ワールドを追加する
 	/// </summary>
@@ -44,7 +53,11 @@ public:
 	/// </summary>
 	/// <param name="id">ワールドID</param>
 	void WorldStart(const WORLD_ID& id);
-
+	/// <summary>
+	/// 指定したワールドを取得する
+	/// </summary>
+	/// <param name="id">ワールドID</param>
+	/// <returns>ワールドポインター</returns>
 	WorldPtr GetWorld(const WORLD_ID& id);
 
 private:

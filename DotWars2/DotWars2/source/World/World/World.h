@@ -46,6 +46,10 @@ public:
 	/// </summary>
 	/// <param name="id">アクターID</param>
 	virtual int ActorsCount(const ACTOR_ID& id) override;
+	/// <summary>
+	/// ワールドをクリアー
+	/// </summary>
+	virtual void Clear()override;
 
 private:
 

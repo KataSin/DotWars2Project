@@ -21,9 +21,21 @@ void WorldManager::Draw() const
 		i.second.world->Draw();
 	}
 }
-void WorldManager::Clear()
+void WorldManager::ManagerClear()
 {
 	mWorlds.clear();
+}
+
+void WorldManager::WorldAllClear()
+{
+	for (auto& i : mWorlds) {
+		i.second.world->Clear();
+	}
+}
+
+void WorldManager::WorldClear(const WORLD_ID & id)
+{
+	mWorlds[id].world->Clear();
 }
 
 void WorldManager::Add(const WORLD_ID & id, WorldPtr world)

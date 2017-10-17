@@ -56,3 +56,8 @@ int World::ActorsCount(const ACTOR_ID & id)
 {
 	return mActors[id].GetActors().size();
 }
+
+void World::Clear()
+{
+	mActors.clear();
+}

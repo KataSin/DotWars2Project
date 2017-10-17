@@ -1,23 +1,27 @@
 #include "Game.h"
 #include <DxLib.h>
+//ワールド
 #include "../World/WorldManager/WorldManager.h"
 #include "../World/WorldID.h"
-
+//シーン
+#include "../Scene/SceneManager/SceneManager.h"
+#include "../Scene/Title/Title.h"
+#include "../Scene/GamePlay/GamePlay.h"
+//その他
 #include "../Time/Time.h"
-
-#include "../Actor/ActorID.h"
-#include "../Actor/Player/Player.h"
-#include "../Camera/Camera.h"
-#include "../Graphic/Model/Model.h"
-#include "../Graphic/Sprite/Sprite.h"
 #include "../Utility/Input/Keyboard/Keyboard.h"
-#include "../Actor/Enemy/Enemy.h"
 Game::Game(int windowWight, int windowHeght, bool fullScene)
 {
 	// 画面モードのセット
 	SetGraphMode(windowWight, windowHeght, 16);
 	//ウィンドウモードに
 	ChangeWindowMode(fullScene ? FALSE : TRUE);
+	//ワールドマネージャー
+	mWorldManager = std::make_shared<WorldManager>();
+	mWorldManager->Add(WORLD_ID::GAME_WORLD, std::make_shared<World>(mWorldManager));
+
+	//シーンマネージャー
+	mSceneManager = std::make_shared<SceneManager>();
 }
 
 Game::~Game()
@@ -26,37 +30,33 @@ Game::~Game()
 
 void Game::Start()
 {
-	Model::GetInstance().Load("resource/Model/Player/Player.mv1", MODEL_ID::PLAYER_MODEL);
-	Sprite::GetInstance().Load("resource/Sprite/Back.png", SPRITE_ID::TEST_SPRITE);
-	//ワールドを生成
-	manager = std::make_shared<WorldManager>();
-	auto world = std::make_shared<World>(manager);
-	world->Add(ACTOR_ID::PLAYER_ACTOR, std::make_shared<Player>(*(world.get()), Matrix4::Identity));
-	world->Add(ACTOR_ID::ENEMY_ACTOR, std::make_shared<Enemy>(*(world.get()), Matrix4::Identity));
-	manager->Add(WORLD_ID::GAME_WORLD, world);
+	mSceneManager->sceneStart();
+	//シーン追加
+	mSceneManager->AddScene(SceneID::TITLE_SCENE, std::make_shared<Title>(mWorldManager));
+	mSceneManager->AddScene(SceneID::GAME_PLAY_SCENE, std::make_shared<GamePlay>(mWorldManager));
+	//最初のシーン
+	mSceneManager->StartScene(SceneID::TITLE_SCENE);
 }
 
 void Game::Update()
 {
+	//キーボードアップデート
 	Keyboard::GetInstance().Update();
-	//カメラ設定
-	Camera::GetInstance().SetTarget(Vector3::Zero);
-	Camera::GetInstance().SetPosition(Vector3(0, 100, 100));
-	Camera::GetInstance().SetRange(1.0f, 1500.0f);
-	Camera::GetInstance().SetCameraVec(Vector3::Up);
-	Camera::GetInstance().Update();
-
+	//タイムアップデート
 	Time::GetInstance().Update();
 
-	manager->Update();
+	//シーンマネージャーアップデート
+	mSceneManager->sceneUpdate();
 }
 
 void Game::Draw() const
 {
-	manager->Draw();
+	//シーンマネージャー描写
+	mSceneManager->sceneDraw();
 }
 
 void Game::End()
 {
-
+	mSceneManager->sceneEnd();
+	mWorldManager->ManagerClear();
 }
