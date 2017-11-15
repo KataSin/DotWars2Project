@@ -12,7 +12,6 @@ class World :public IWorld {
 public:
 	World(WorldManagerPtr manager);
 	~World();
-
 	void Update();
 	void Draw() const;
 
