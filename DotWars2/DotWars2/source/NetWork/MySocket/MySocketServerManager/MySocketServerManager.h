@@ -25,15 +25,28 @@ public:
 	/// 接続待ちをする(TCPサーバーソケット限定)
 	/// </summary>
 	/// <param name="max">最大接続人数</param>
-	void AcceptServer(int max);
+	bool AcceptServer(int max);
 	/// <summary>
-	/// 情報をサーバーから全クライアントに送る
+	/// クライアントから情報を取得する
 	/// </summary>
-	void SendStateServerToClient();
+	void Read();
 	/// <summary>
-	/// 情報をクライアントから受け取る
+	/// クライアントに情報を送る
 	/// </summary>
-	void ReadStateServer();
+	void Send();
+	/// <summary>
+	/// 最初の情報を送る
+	/// </summary>
+	/// <param name="sock">ソケット</param>
+	/// <param name="state">情報</param>
+	void FirstSend(SOCKET sock,FirstToClientState state);
+
+	/// <summary>
+	/// サーバーの情報を取得する
+	/// </summary>
+	/// <returns>情報</returns>
+	ServerToClientState GetServerState();
+
 private:
 	//自身のソケット
 	MySocketServerPtr mMySocketServer;
@@ -41,4 +54,17 @@ private:
 	std::vector<MySocketServerPtr>mMySocketServers;
 	//サーバーが持っている情報
 	ServerToClientState mServerState;
+	//サーバー接続人数
+	int mAcceptNum;
+
+	//番号を振る際のフラグ
+	bool mNumFlag;
+
+	//前のデータを保存(パケットロス用)
+	ServerToClientState mSeveState;
+	//パケットロスかエラーしているかどうかの判断
+	std::vector<bool> m_PacketLoss;
+
+	//最初の情報
+	FirstToClientState mFirstState;
 };

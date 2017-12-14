@@ -6,7 +6,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	LPSTR lpCmdLine, int nCmdShow)
 {
 	Game game(640, 480, false);
-
+	SetDoubleStartValidFlag(TRUE);
+	SetAlwaysRunFlag(TRUE);
 	//dxlibèâä˙âª
 	if (DxLib_Init() == -1)
 	{

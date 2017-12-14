@@ -24,7 +24,7 @@ SocketErrorReturn MySocketClient::CreateSocket(SOCKET_STATE state)
 	return error;
 }
 
-SocketErrorReturn MySocketClient::SendSocket(DotWarsNet state)
+SocketErrorReturn MySocketClient::Send(DotWarsNet state)
 {
 	SocketErrorReturn error;
 	if (send(mSocket, reinterpret_cast<char*>(&state), sizeof(state), 0) == SOCKET_ERROR) {
@@ -36,7 +36,19 @@ SocketErrorReturn MySocketClient::SendSocket(DotWarsNet state)
 	return error;
 }
 
-SocketErrorReturn MySocketClient::ReadSocket(ServerToClientState & readState)
+SocketErrorReturn MySocketClient::FirstSend(/*FirstState state*/)
+{
+	SocketErrorReturn error;
+	//if (send(mSocket, reinterpret_cast<char*>(&state), sizeof(state), 0) == SOCKET_ERROR) {
+	//	error.errorText = "クライアントからのからの送信に失敗しました";
+	//	error.isError = true;
+	//	return error;
+	//}
+	//error.isError = false;
+	return error;
+}
+
+SocketErrorReturn MySocketClient::FirstRead(FirstToClientState & readState)
 {
 	SocketErrorReturn error;
 	//セレクトでブロッキング阻止
@@ -56,12 +68,48 @@ SocketErrorReturn MySocketClient::ReadSocket(ServerToClientState & readState)
 		return error;
 	}
 	//読み込める状態じゃなかったら
-	if (!FD_ISSET(socket, &set)) {
+	if (!FD_ISSET(mSocket, &set)) {
+		error.isError = true;
+		return error;
+	}
+	FirstToClientState state;
+	if (recv(mSocket, reinterpret_cast<char*>(&state), sizeof(state), 0) == SOCKET_ERROR) {
+		error.errorText = "読み込みエラー";
+		error.isError = true;
+		return error;
+	}
+	readState = state;
+	error.isError = false;
+	return error;
+
+}
+
+SocketErrorReturn MySocketClient::Read(ServerToClientState & readState)
+{
+	SocketErrorReturn error;
+	//セレクトでブロッキング阻止
+	fd_set set;
+	//初期化
+	FD_ZERO(&set);
+	FD_SET(mSocket, &set);
+	//タイムアウト時間設定
+	timeval time;
+	time.tv_sec = 0.0f;
+	time.tv_usec = 0.0f;
+	//読み取り出来るかチェック
+	if (select(FD_SETSIZE, &set, 0, 0, &time) == SOCKET_ERROR) {
+		//エラーの場合もnull
+		error.errorText = "読み込みのセレクトエラー";
+		error.isError = true;
+		return error;
+	}
+	//読み込める状態じゃなかったら
+	if (!FD_ISSET(mSocket, &set)) {
 		error.isError = true;
 		return error;
 	}
 	ServerToClientState state;
-	if (recv(mSocket, reinterpret_cast<char*>(&state), sizeof(state), 0) == SOCKET_ERROR) {
+	if (recv(mSocket, reinterpret_cast<char*>(&state), sizeof(ServerToClientState), 0) == SOCKET_ERROR) {
 		error.errorText = "読み込みエラー";
 		error.isError = true;
 		return error;

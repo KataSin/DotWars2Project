@@ -15,16 +15,41 @@ void MySocketClientManager::Initialize(const SOCKET_STATE & state)
 {
 	mMySocketClient->CreateSocket(state);
 }
-void MySocketClientManager::ConnectClient(const std::string & addr, int port)
+bool MySocketClientManager::ConnectClient(const std::string & addr, int port)
 {
-	mMySocketClient->ConnectSocket(addr, port);
+	if (!mMySocketClient->ConnectSocket(addr, port).isError) {
+		return true;
+	}
+	return false;
 }
-void MySocketClientManager::SendClient()
+void MySocketClientManager::Send()
 {
-	mMySocketClient->SendSocket(mNetState);
+	if (!mMySocketClient->Send(mNetState).isError) {
+	}
 }
 
-void MySocketClientManager::ReadClient()
+bool MySocketClientManager::Read()
 {
-	mMySocketClient->ReadSocket(mServerState);
+	return !(mMySocketClient->Read(mServerState).isError);
+}
+
+bool MySocketClientManager::FirstRead()
+{
+	return !(mMySocketClient->FirstRead(mFirstState).isError);
+}
+
+
+void MySocketClientManager::SetState(const DotWarsNet & state)
+{
+	mNetState = state;
+}
+
+ServerToClientState MySocketClientManager::GetState()
+{
+	return mServerState;
+}
+
+FirstToClientState MySocketClientManager::GetFirstState()
+{
+	return mFirstState;
 }

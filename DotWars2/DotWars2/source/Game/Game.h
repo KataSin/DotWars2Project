@@ -3,6 +3,14 @@
 #include "../World/WorldManager/WorldManager.h"
 #include "../World/World/World.h"
 
+#include "../NetWork/MySocket/MySocketClient/MySocketClient.h"
+#include "../NetWork/MySocket/MySocketClientManager/MySocketClientManager.h"
+#include "../NetWork/MySocket/MySocketServer/MySocketServer.h"
+#include "../NetWork/MySocket/MySocketServerManager/MySocketServerManager.h"
+#include "../NetWork/MySocket/MySocketPtr.h"
+
+
+
 #include <memory>
 class Game {
 public:
@@ -34,8 +42,27 @@ public:
 	/// </summary>
 	void End();
 private:
+
+	MySocketClientManager* clientManager;
+	MySocketServerManager* serverManager;
+
+
+
+	std::vector<DotWarsNet> mServerState;
+
+	
+	//サーバーかどうか
+	bool serverFlag;
 	//ワールドポインター
 	WorldManagerPtr mWorldManager;
 	//シーンマネージャー
 	SceneManagerPtr mSceneManager;
+
+	int stageNum;
+	
+
+	int playerNum;
+
+	DotWarsNet mClientState;
+	std::string debug;
 };

@@ -4,7 +4,6 @@
 #include "../MySocketClient/MySocketClient.h"
 #include "../../NetGameState.h"
 #include <string>
-#include <winsock.h>
 #include <vector>
 class MySocketClientManager {
 public:
@@ -21,16 +20,34 @@ public:
 	/// </summary>
 	/// <param name="addr">アドレス</param>
 	/// <param name="port">ポート</param>
-	void ConnectClient(const std::string& addr,int port);
+	bool ConnectClient(const std::string& addr,int port);
 	/// <summary>
 	/// 情報をサーバーに送る
 	/// </summary>
-	void SendClient();
+	void Send();
 	/// <summary>
-	/// 情報をクライアントから受け取る
+	/// 情報をサーバーから受け取る
 	/// </summary>
-	void ReadClient();
-
+	bool Read();
+	/// <summary>
+	/// 最初の情報を受け取る
+	/// </summary>
+	bool FirstRead();
+	/// <summary>
+	/// 送る情報を設定
+	/// </summary>
+	/// <param name="state">情報</param>
+	void SetState(const DotWarsNet& state);
+	/// <summary>
+	/// 情報を取得
+	/// </summary>
+	/// <returns>情報</returns>
+	ServerToClientState GetState();
+	/// <summary>
+	/// 最初の情報を取得
+	/// </summary>
+	/// <returns></returns>
+	FirstToClientState GetFirstState();
 private:
 	//自身のソケット
 	MySocketClientPtr mMySocketClient;
@@ -38,4 +55,7 @@ private:
 	DotWarsNet mNetState;
 	//サーバーの情報
 	ServerToClientState mServerState;
+	//最初の情報
+	FirstToClientState mFirstState;
+
 };

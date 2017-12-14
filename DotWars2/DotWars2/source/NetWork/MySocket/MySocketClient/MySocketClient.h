@@ -1,6 +1,5 @@
 #pragma once
 #include <string>
-#include <WinSock2.h>
 #include "../MySocketPtr.h"
 #include "../../NetGameState.h"
 #include "../MySocketServer/MySocketServer.h"
@@ -24,17 +23,31 @@ public:
 	/// <summary>
 	/// データを送る(TCPソケットクライアント用)
 	/// </summary>
-	/// <param name="socket">送りたいソケット</param>
 	/// <param name="state">送りたいデータ</param>
 	/// <returns>エラー内容</returns>
-	SocketErrorReturn SendSocket(DotWarsNet state);
+	SocketErrorReturn Send(DotWarsNet state);
+
+	/// <summary>
+	/// 最初のデータを送る(TCPソケットクライアント用)
+	/// </summary>
+	/// <param name="state">送りたいデータ</param>
+	/// <returns>エラー内容</returns>
+	SocketErrorReturn FirstSend();
+	/// <summary>
+	/// 最初のデータを受信する(TCPクライアントソケット用)
+	/// </summary>
+	/// <param name="socket">受信したいソケット</param>
+	/// <param name="readState">読み込みたいデータ</param>
+	/// <returns>エラー内容</returns>
+	SocketErrorReturn FirstRead(FirstToClientState & readState);
+
 	/// <summary>
 	/// データを受信する(TCPクライアントソケット用)
 	/// </summary>
 	/// <param name="socket">受信したいソケット</param>
 	/// <param name="readState">読み込みたいデータ</param>
 	/// <returns>エラー内容</returns>
-	SocketErrorReturn ReadSocket(ServerToClientState& readState);
+	SocketErrorReturn Read(ServerToClientState& readState);
 	/// <summary>
 	/// サーバーに接続する(TCPクライアント用)
 	/// </summary>

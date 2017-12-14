@@ -1,6 +1,6 @@
 #pragma once
 #include <string>
-#include <WinSock2.h>
+#include <winsock.h>
 #include "../MySocketPtr.h"
 #include "../../NetGameState.h"
 enum SOCKET_STATE {
@@ -48,6 +48,25 @@ public:
 	/// <param name="socket">ソケット</param>
 	/// <param name="addr">アドレス</param>
 	void SetSocket(SOCKET_STATE state, const SOCKET& socket, const sockaddr_in& addr);
+	
+
+	/// <summary>
+	/// 最初に使うデータを送る
+	/// </summary>
+	/// <param name="socket">ソケット</param>
+	/// <param name="state">送りたいデータ</param>
+	SocketErrorReturn FirstSend(SOCKET socket, FirstToClientState state);
+
+	/// <summary>
+	/// 最初のデータを受信する(TCPサーバーソケット用)
+	/// </summary>
+	/// <param name="socket">受信したいソケット</param>
+	/// <param name="readState">読み込みたいデータ</param>
+	/// <returns>エラー内容</returns>
+	SocketErrorReturn FirstRead(SOCKET socket, FirstToClientState& readState);
+
+
+
 	/// <summary>
 	/// データを送る(TCPソケットサーバー用)
 	/// </summary>
