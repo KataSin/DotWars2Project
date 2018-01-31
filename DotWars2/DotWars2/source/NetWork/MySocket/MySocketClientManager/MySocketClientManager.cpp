@@ -15,6 +15,10 @@ void MySocketClientManager::Initialize(const SOCKET_STATE & state)
 {
 	mMySocketClient->CreateSocket(state);
 }
+void MySocketClientManager::CloseSocket()
+{
+	mMySocketClient->CloseSocket();
+}
 bool MySocketClientManager::ConnectClient(const std::string & addr, int port)
 {
 	if (!mMySocketClient->ConnectSocket(addr, port).isError) {
@@ -24,8 +28,7 @@ bool MySocketClientManager::ConnectClient(const std::string & addr, int port)
 }
 void MySocketClientManager::Send()
 {
-	if (!mMySocketClient->Send(mNetState).isError) {
-	}
+	mMySocketClient->SendUDP(mNetState);
 }
 
 bool MySocketClientManager::Read()
@@ -36,6 +39,11 @@ bool MySocketClientManager::Read()
 bool MySocketClientManager::FirstRead()
 {
 	return !(mMySocketClient->FirstRead(mFirstState).isError);
+}
+
+bool MySocketClientManager::Bind(int port)
+{
+	return !(mMySocketClient->BindSocket(port).isError);
 }
 
 

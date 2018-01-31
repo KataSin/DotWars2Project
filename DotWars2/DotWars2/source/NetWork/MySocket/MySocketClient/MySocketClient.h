@@ -26,6 +26,19 @@ public:
 	/// <param name="state">送りたいデータ</param>
 	/// <returns>エラー内容</returns>
 	SocketErrorReturn Send(DotWarsNet state);
+	/// <summary>
+	/// データを送る(TCPソケットクライアント用)
+	/// </summary>
+	/// <param name="state">送りたいデータ</param>
+	/// <returns>エラー内容</returns>
+	void SendUDP(DotWarsNet state);
+	/// <summary>
+	/// バインドする アドレスはINADDR_ANY(UDP用)
+	/// </summary>
+	/// <param name="port">ポート番号</param>
+	SocketErrorReturn BindSocket(int port);
+
+
 
 	/// <summary>
 	/// 最初のデータを送る(TCPソケットクライアント用)
@@ -71,6 +84,9 @@ public:
 	/// <returns>アドレス</returns>
 	sockaddr_in GetAddr();
 
+
+	void CloseSocket();
+
 private:
 	//ソケット
 	SOCKET mSocket;
@@ -82,4 +98,6 @@ private:
 	std::string mErrorText;
 	//アドレス情報
 	sockaddr_in mAddr;
+	//接続してるサーバーのアドレス
+	sockaddr_in mServerAddr;
 };

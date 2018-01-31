@@ -16,6 +16,15 @@ public:
 	/// <param name="state"></param>
 	void Initialize(const SOCKET_STATE& state);
 	/// <summary>
+	/// 自身のソケットを消す
+	/// </summary>
+	void CloseSocket();
+	/// <summary>
+	/// バインドする
+	/// </summary>
+	void Bind(int port);
+
+	/// <summary>
 	/// サーバーを開ける(TCPサーバーソケット限定)
 	/// </summary>
 	/// <param name="port">ポート番号</param>

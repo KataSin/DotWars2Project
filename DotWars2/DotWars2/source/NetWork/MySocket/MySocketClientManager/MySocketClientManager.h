@@ -16,6 +16,11 @@ public:
 	/// <param name="state"></param>
 	void Initialize(const SOCKET_STATE& state);
 	/// <summary>
+	/// ソケットを閉じる
+	/// </summary>
+	void CloseSocket();
+
+	/// <summary>
 	/// サーバーに接続する
 	/// </summary>
 	/// <param name="addr">アドレス</param>
@@ -33,6 +38,10 @@ public:
 	/// 最初の情報を受け取る
 	/// </summary>
 	bool FirstRead();
+	/// <summary>
+	/// ソケットをバインドする
+	/// </summary>
+	bool Bind(int port);
 	/// <summary>
 	/// 送る情報を設定
 	/// </summary>

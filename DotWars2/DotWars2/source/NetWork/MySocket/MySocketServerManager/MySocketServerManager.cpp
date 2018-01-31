@@ -24,6 +24,16 @@ void MySocketServerManager::Initialize(const SOCKET_STATE & state)
 	mMySocketServer->CreateSocket(state);
 }
 
+void MySocketServerManager::CloseSocket()
+{
+	mMySocketServer->CloseSocket();
+}
+
+void MySocketServerManager::Bind(int port)
+{
+	mMySocketServer->BindSocket(port, INADDR_ANY);
+}
+
 void MySocketServerManager::OpenServer(int port, const std::string& addr)
 {
 	mMySocketServer->BindSocket(port, addr);
@@ -50,6 +60,7 @@ void MySocketServerManager::Read()
 {
 	for (int i = 0; i <= mMySocketServers.size() - 1; i++) {
 		DotWarsNet state;
+		//‚±‚±‚ª‚¨‚©‚µ‚¢
 		if (!mMySocketServer->ReadSocket(mMySocketServers[i]->GetSocket(), state).isError) {
 			//ƒf[ƒ^‚ğó‚¯æ‚ê‚½‚ç‚»‚Ì‚Ü‚Ü“ü‚ê‚é
 			mServerState.states[state.playerNum - 1] = state;
@@ -60,10 +71,7 @@ void MySocketServerManager::Read()
 
 void MySocketServerManager::Send()
 {
-	for (int i = 0; i <= mMySocketServers.size() - 1; i++) {
-		mMySocketServer->SendSocket(mMySocketServers[i]->GetSocket(), mServerState);
-	}
-
+	mMySocketServer->SendSocketUDP(mServerState);
 }
 
 void MySocketServerManager::FirstSend(SOCKET sock, FirstToClientState state)

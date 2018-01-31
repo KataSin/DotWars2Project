@@ -33,17 +33,17 @@ Game::~Game()
 
 void Game::Start()
 {
+	WSADATA wsaData;
+	//winsock初期化
+	WSAStartup(MAKEWORD(2, 0), &wsaData);
 	//サーバーです
-	serverFlag = false;
+	serverFlag = true;
 	if (serverFlag) {
-		serverManager = new MySocketServerManager();
-		serverManager->Initialize(SOCKET_STATE::TCP_SERVER_SOCKET);
-		serverManager->OpenServer(12345, "127.0.0.1");
+		mServerManager = new TCPServerSocketManager();
 	}
 	else
 	{
-		clientManager = new MySocketClientManager();
-		clientManager->Initialize(SOCKET_STATE::TCP_CLIENT_SOCKET);
+		mClientManager = new TCPClientSocketManager();
 	}
 
 
@@ -58,111 +58,77 @@ void Game::Start()
 
 void Game::Update()
 {
-	//サーバー処理
 	if (serverFlag) {
 		switch (stageNum)
 		{
-		case 0:
-		{
-			debug = "プレイヤーを待っています";
-			if (serverManager->AcceptServer(2))
+		case 0: {
+			debug = "プレイヤーの受付準備中";
+			if (mServerManager->Listen(2))
 				stageNum++;
 			break;
 		}
-		case 1:
-		{
-			debug = "サーバーから通信中";
-			serverManager->Send();
-			serverManager->Read();
-			
-			for (int i = 0; i < 4; i++) {
-				mServerState.push_back(clientManager->GetState().states[i]);
-			}
+		case 1: {
+			debug = "プレイヤー受付中";
+			if (mServerManager->Accept())
+				stageNum++;
+			break;
+		}
+		case 2: {
+			debug = "プレイヤーに情報を送り中";
+			if (mServerManager->Send())
+				stageNum++;
+			break;
+		}
+		case 3: {
+			debug = "TCP終了";
+			mServerManager->Close();
 			break;
 		}
 		}
 	}
-	//クライアント処理
 	else
 	{
 		switch (stageNum)
 		{
-		case 0:
-		{
-			debug = "サーバー接続に接続しています";
-			if (clientManager->ConnectClient("127.0.0.1", 12345))
+		case 0: {
+			debug = "サーバーに接続中";
+			if (mClientManager->Connect("127.0.0.1", 12345))
 				stageNum++;
 			break;
 		}
-		case 1:
-		{
-			//割り当てられたものをもらう
-			debug = "最初の情報をもらっています";
-			if (clientManager->FirstRead()) {
-				mClientState.playerNum = clientManager->GetFirstState().playerNum;
-				mClientState.position = clientManager->GetFirstState().position;
+		case 1: {
+			debug = "情報取得中";
+			FirstToClientState state;
+			if (mClientManager->Read(state)) {
+				std::string text;
+				//デバッグ用
+				debug = "playerNum:" + std::to_string(state.playerNum) + "PositionX:" + std::to_string(state.position.x) + "PositionY:" + std::to_string(state.position.y);
 				stageNum++;
 			}
 			break;
 		}
-		case 2:
-		{
-			clientManager->SetState(mClientState);
-			if (!clientManager->Read())return;
-			clientManager->Send();
-			stageNum++;
-			break;
-		}
-		case 3:
-		{
-			debug = "クライアントから通信中";
-			if (Keyboard::GetInstance().KeyStateDown(KEYCODE::A)) {
-				mClientState.position.x -= 40.0f*Time::GetInstance().DeltaTime();
-			}
-			if (Keyboard::GetInstance().KeyStateDown(KEYCODE::D)) {
-				mClientState.position.x += 40.0f*Time::GetInstance().DeltaTime();
-			}
-			if (Keyboard::GetInstance().KeyStateDown(KEYCODE::W)) {
-				mClientState.position.y += 40.0f*Time::GetInstance().DeltaTime();
-			}
-			if (Keyboard::GetInstance().KeyStateDown(KEYCODE::S)) {
-				mClientState.position.y -= 40.0f*Time::GetInstance().DeltaTime();
-
-			}
-			clientManager->SetState(mClientState);
-
-
-
-			clientManager->Read();
-			clientManager->Send();
-			
-			mServerState.clear();
-			for (int i = 0; i < 2; i++) {
-				mServerState.push_back(clientManager->GetState().states[i]);
-			}
+		case 2: {
+			mClientManager->Close();
 			break;
 		}
 		}
 	}
+
 
 	//キーボードアップデート
 	Keyboard::GetInstance().Update();
 	//タイムアップデート
 	Time::GetInstance().Update();
+
+
 	////シーンマネージャーアップデート
 	//mSceneManager->sceneUpdate();
 }
 
 void Game::Draw() const
 {
+
 	DrawString(0, 0, debug.c_str(), GetColor(255, 255, 255));
-	
-	std::string pos = "プレイヤー" + std::to_string(mClientState.playerNum) + "x:" + std::to_string(mClientState.position.x)+"y:"+std::to_string(mClientState.position.y);
-	DrawString(200, 0, pos.c_str(), GetColor(128, 128, 128));
-
-	DrawCircle(mClientState.position.x, mClientState.position.y, 5, GetColor(255, 255, 255));
-
-
 	////シーンマネージャー描写
 	//mSceneManager->sceneDraw();
 }

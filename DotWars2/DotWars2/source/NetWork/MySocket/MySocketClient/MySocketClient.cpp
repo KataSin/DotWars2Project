@@ -8,6 +8,7 @@ MySocketClient::MySocketClient()
 
 MySocketClient::~MySocketClient()
 {
+
 }
 
 SocketErrorReturn MySocketClient::CreateSocket(SOCKET_STATE state)
@@ -33,6 +34,28 @@ SocketErrorReturn MySocketClient::Send(DotWarsNet state)
 		return error;
 	}
 	error.isError = false;
+	return error;
+}
+
+void MySocketClient::SendUDP(DotWarsNet state)
+{
+	//送れるかどうかは分からない
+	sendto(mSocket, reinterpret_cast<char*>(&state), sizeof(DotWarsNet), 0, (struct sockaddr*)&mServerAddr, sizeof(mServerAddr));
+}
+
+SocketErrorReturn MySocketClient::BindSocket(int port)
+{
+	SocketErrorReturn error;
+	struct sockaddr_in add;
+	add.sin_family = AF_INET;
+	add.sin_port = htons(port);
+	add.sin_addr.S_un.S_addr = INADDR_ANY;
+
+	if (bind(mSocket, (struct sockaddr*)&add, sizeof(add)) != 0) {
+		error.errorText = "ソケットのバインドに失敗しました";
+		error.isError = true;
+		return error;
+	}
 	return error;
 }
 
@@ -73,7 +96,8 @@ SocketErrorReturn MySocketClient::FirstRead(FirstToClientState & readState)
 		return error;
 	}
 	FirstToClientState state;
-	if (recv(mSocket, reinterpret_cast<char*>(&state), sizeof(state), 0) == SOCKET_ERROR) {
+	int len = sizeof(mServerAddr);
+	if (recvfrom(mSocket, reinterpret_cast<char*>(&state), sizeof(state), 0, (struct sockaddr*)&mServerAddr, &len) == SOCKET_ERROR) {
 		error.errorText = "読み込みエラー";
 		error.isError = true;
 		return error;
@@ -108,8 +132,12 @@ SocketErrorReturn MySocketClient::Read(ServerToClientState & readState)
 		error.isError = true;
 		return error;
 	}
+	//受信されたアドレス
+	struct sockaddr_in fromAddr;
+	//住所サイズ
+	int sinSize = sizeof(sockaddr_in);
 	ServerToClientState state;
-	if (recv(mSocket, reinterpret_cast<char*>(&state), sizeof(ServerToClientState), 0) == SOCKET_ERROR) {
+	if (recvfrom(mSocket, reinterpret_cast<char*>(&state), sizeof(ServerToClientState), 0, (struct sockaddr*)& fromAddr, &sinSize) == SOCKET_ERROR) {
 		error.errorText = "読み込みエラー";
 		error.isError = true;
 		return error;
@@ -132,6 +160,8 @@ SocketErrorReturn MySocketClient::ConnectSocket(std::string add, int port)
 		error.isError = true;
 		return error;
 	}
+	//サーバーのアドレスを保存
+	mServerAddr = server;
 	error.isError = false;
 	return error;
 }
@@ -148,6 +178,11 @@ SOCKET MySocketClient::GetSocket()
 sockaddr_in MySocketClient::GetAddr()
 {
 	return mAddr;
+}
+void MySocketClient::CloseSocket()
+{
+	closesocket(mSocket);
+	mSocket = -1;
 }
 void MySocketClient::SetSocket(SOCKET_STATE state, const SOCKET & socket, const sockaddr_in & addr)
 {

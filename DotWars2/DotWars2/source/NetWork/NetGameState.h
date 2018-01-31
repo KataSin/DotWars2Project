@@ -7,13 +7,15 @@
 struct DotWarsNet
 {
 	int playerNum = -1;    //どのプレイヤーか
+	int frame = 0;		//どのフレーム数か
 	Vector3 position; //プレイヤーの座標(テスト)
 };
 
 struct ServerToClientState
 {
-	int playerNum = -1;                  //受け取るプレイヤー番号
-	DotWarsNet states[4]; //プレイヤーの状態コンテナ
+	int playerNum = -1;                 //受け取るプレイヤー番号
+	int frame = 0;						//フレーム数
+	DotWarsNet states[4];				//プレイヤーの状態コンテナ
 };
 
 //最初にサーバーが送る情報

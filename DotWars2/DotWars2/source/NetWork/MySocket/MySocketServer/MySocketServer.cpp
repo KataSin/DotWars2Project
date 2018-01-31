@@ -41,7 +41,7 @@ SocketErrorReturn MySocketServer::ListenSocket(int maxListen)
 {
 	SocketErrorReturn error;
 	if (listen(mSocket, maxListen) != 0) {
-		error.errorText= "ソケットの待機に失敗しました";
+		error.errorText = "ソケットの待機に失敗しました";
 		error.isError = true;
 		return error;
 	}
@@ -85,6 +85,8 @@ SocketErrorReturn MySocketServer::AcceptSocket(MySocketServerPtr& socketPtr)
 	}
 	auto socket = std::make_shared<MySocketServer>();
 	socket->SetSocket(SOCKET_STATE::TCP_CLIENT_SOCKET, sock, addr);
+	//サーバーにクライアントのアドレスを収納
+	mClientAddrs.push_back(addr);
 	socketPtr = socket;
 
 	error.isError = false;
@@ -160,14 +162,28 @@ SocketErrorReturn MySocketServer::SendSocket(SOCKET socket, ServerToClientState 
 	return error;
 }
 
-SocketErrorReturn MySocketServer::ReadSocket(SOCKET socket,DotWarsNet & readState)
+void MySocketServer::SendSocketUDP(ServerToClientState state)
+{
+	//送るけど送れるかは保証しない
+	for (const auto& i : mClientAddrs) {
+		sockaddr_in addr;
+		addr.sin_family = AF_INET;
+		addr.sin_port = htons(12345);
+		addr.sin_addr = i.sin_addr;
+		int error=sendto(mSocket, reinterpret_cast<char*>(&state), sizeof(ServerToClientState), 0, (struct sockaddr*)&addr, sizeof(addr));
+		int a = 0;
+	}
+	
+}
+
+SocketErrorReturn MySocketServer::ReadSocket(SOCKET socket, DotWarsNet & readState)
 {
 	SocketErrorReturn error;
 	//セレクトでブロッキング阻止
 	fd_set set;
 	//初期化
 	FD_ZERO(&set);
-	FD_SET(socket, &set);
+	FD_SET(mSocket, &set);
 	//タイムアウト時間設定
 	timeval time;
 	time.tv_sec = 0.0f;
@@ -180,19 +196,21 @@ SocketErrorReturn MySocketServer::ReadSocket(SOCKET socket,DotWarsNet & readStat
 		return error;
 	}
 	//読み込める状態じゃなかったら
-	if (!FD_ISSET(socket, &set)) {
+	if (!FD_ISSET(mSocket, &set)) {
 		error.isError = true;
 		return error;
 	}
+	//受信されたアドレス
+	struct sockaddr_in fromAddr;
+	//住所サイズ
+	int sinSize = sizeof(sockaddr_in);
 	DotWarsNet state;
-	if (recv(socket, reinterpret_cast<char*>(&state), sizeof(DotWarsNet), 0) == SOCKET_ERROR) {
+	if (recvfrom(mSocket, reinterpret_cast<char*>(&state), sizeof(DotWarsNet), 0, (struct sockaddr*)& fromAddr, &sinSize) == SOCKET_ERROR) {
 		error.errorText = "読み込みエラー";
 		error.isError = true;
 		return error;
 	}
 	readState = state;
-
-
 
 	error.isError = false;
 	return error;
@@ -211,4 +229,10 @@ SOCKET MySocketServer::GetSocket()
 sockaddr_in MySocketServer::GetAddr()
 {
 	return mAddr;
+}
+
+void MySocketServer::CloseSocket()
+{
+	closesocket(mSocket);
+	mSocket = -1;
 }

@@ -2,16 +2,10 @@
 #include "../IncludePtr.h"
 #include "../World/WorldManager/WorldManager.h"
 #include "../World/World/World.h"
-
-#include "../NetWork/MySocket/MySocketClient/MySocketClient.h"
-#include "../NetWork/MySocket/MySocketClientManager/MySocketClientManager.h"
-#include "../NetWork/MySocket/MySocketServer/MySocketServer.h"
-#include "../NetWork/MySocket/MySocketServerManager/MySocketServerManager.h"
-#include "../NetWork/MySocket/MySocketPtr.h"
-
-
-
 #include <memory>
+
+#include "../NetWork/MySocketVar2/TCP/Manager/TCPClientSocketManager.h"
+#include "../NetWork/MySocketVar2/TCP/Manager/TCPServerSocketManager.h"
 class Game {
 public:
 	/// <summary>
@@ -43,13 +37,8 @@ public:
 	void End();
 private:
 
-	MySocketClientManager* clientManager;
-	MySocketServerManager* serverManager;
-
-
-
-	std::vector<DotWarsNet> mServerState;
-
+	TCPClientSocketManager* mClientManager;
+	TCPServerSocketManager* mServerManager;
 	
 	//サーバーかどうか
 	bool serverFlag;
