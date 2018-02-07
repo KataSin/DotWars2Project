@@ -6,6 +6,10 @@
 
 #include "../NetWork/MySocketVar2/TCP/Manager/TCPClientSocketManager.h"
 #include "../NetWork/MySocketVar2/TCP/Manager/TCPServerSocketManager.h"
+#include "../NetWork/MySocketVar2/UDP/Manager/UDPClientSocketManager.h"
+#include "../NetWork/MySocketVar2/UDP/Manager/UDPServerSocketManager.h"
+
+
 class Game {
 public:
 	/// <summary>
@@ -39,7 +43,10 @@ private:
 
 	TCPClientSocketManager* mClientManager;
 	TCPServerSocketManager* mServerManager;
-	
+
+	UDPClientSocketManager* mUdpClientManager;
+	UDPServerSocketManager* mUdpServerManager;
+
 	//サーバーかどうか
 	bool serverFlag;
 	//ワールドポインター

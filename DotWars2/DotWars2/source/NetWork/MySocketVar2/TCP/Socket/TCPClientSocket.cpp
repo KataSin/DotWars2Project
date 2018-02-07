@@ -52,6 +52,9 @@ TCPClientSocket::SocketError TCPClientSocket::Read(FirstToClientState & readStat
 		return error;
 	}
 	readState = state;
+
+
+
 	error.isError = false;
 	return error;
 
@@ -64,7 +67,6 @@ TCPClientSocket::SocketError TCPClientSocket::ConnectSocket(std::string add, int
 	server.sin_family = AF_INET;
 	server.sin_port = htons(port);
 	server.sin_addr.S_un.S_addr = inet_addr(add.c_str());
-	auto a = connect(mSocket, (struct sockaddr*)&server, sizeof(server));
 	if (connect(mSocket, (struct sockaddr*)&server, sizeof(server)) == SOCKET_ERROR)
 	{
 		error.text = "コネクトエラー";

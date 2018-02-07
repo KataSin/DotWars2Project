@@ -3,15 +3,15 @@
 #include <string>
 
 #include "../../../NetGameState.h"
-class UDPServerSocket {
+class UDPClientSocket {
 public:
 	struct SocketError {
 		bool isError = false;
 		std::string text;
 	};
 public:
-	UDPServerSocket();
-	~UDPServerSocket();
+	UDPClientSocket();
+	~UDPClientSocket();
 	/// <summary>
 	/// ソケットを作成する
 	/// </summary>
@@ -31,13 +31,13 @@ public:
 	/// <param name="addr">送りたいアドレス</param>
 	/// <param name="state">送りたい情報</param>
 	/// <returns></returns>
-	SocketError Send(sockaddr_in addr, ServerToClientState& state);
+	SocketError Send(sockaddr_in addr, DotWarsNet& state);
 	/// <summary>
 	/// 情報をもらう
 	/// </summary>
 	/// <param name="state"></param>
 	/// <returns></returns>
-	SocketError Read(DotWarsNet& state);
+	SocketError Read(ServerToClientState& state);
 	/// <summary>
 	/// ソケットを削除する
 	/// </summary>

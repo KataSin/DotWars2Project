@@ -4,7 +4,7 @@ TCPServerSocketManager::TCPServerSocketManager()
 {
 	mSocket = std::make_shared<TCPServerSocket>();
 	mSocket->CreateSocket();
-	mSocket->BindSocket("127.0.0.1", 12345);
+	mSocket->BindSocket("127.0.0.1", 1234567);
 
 	//‘—‚éî•ñ‚ğİ’è
 	{
@@ -57,6 +57,10 @@ bool TCPServerSocketManager::Send()
 	for (int i = 0; i <= mClientSockets.size() - 1; i++) {
 		const SOCKET clientSocket = mClientSockets[i]->GetSocket();
 		FirstToClientState state = mToClientState[i];
+		
+		mServerToState.states[i].playerNum = mToClientState[i].playerNum;
+		mServerToState.states[i].position = mToClientState[i].position;
+
 		if (mSocket->Send(clientSocket, state).isError) {
 			return false;
 		}
@@ -73,4 +77,9 @@ bool TCPServerSocketManager::Close()
 std::vector<TCPClientSocketPtr> TCPServerSocketManager::GetConnectSockets()
 {
 	return mClientSockets;
+}
+
+ServerToClientState TCPServerSocketManager::GetFirstState()
+{
+	return mServerToState;
 }

@@ -1,15 +1,14 @@
-#include "UDPServerSocket.h"
+#include "UDPClientSocket.h"
 
-UDPServerSocket::UDPServerSocket()
-{
-
-}
-
-UDPServerSocket::~UDPServerSocket()
+UDPClientSocket::UDPClientSocket()
 {
 }
 
-UDPServerSocket::SocketError UDPServerSocket::CreateSocket()
+UDPClientSocket::~UDPClientSocket()
+{
+}
+
+UDPClientSocket::SocketError UDPClientSocket::CreateSocket()
 {
 	SocketError error;
 	mSocket = socket(AF_INET, SOCK_DGRAM, 0);
@@ -22,11 +21,14 @@ UDPServerSocket::SocketError UDPServerSocket::CreateSocket()
 	return error;
 }
 
-UDPServerSocket::SocketError UDPServerSocket::BindSocket(int port)
+UDPClientSocket::SocketError UDPClientSocket::BindSocket(int port)
 {
 	SocketError error;
 	struct sockaddr_in add;
 	add.sin_family = AF_INET;
+
+
+	//ここのポートを変える
 	add.sin_port = htons(port);
 	add.sin_addr.S_un.S_addr = INADDR_ANY;
 
@@ -36,18 +38,17 @@ UDPServerSocket::SocketError UDPServerSocket::BindSocket(int port)
 		return error;
 	}
 	return error;
-
 }
 
-UDPServerSocket::SocketError UDPServerSocket::Send(sockaddr_in addr, ServerToClientState & state)
+UDPClientSocket::SocketError UDPClientSocket::Send(sockaddr_in addr, DotWarsNet & state)
 {
-	sendto(mSocket, reinterpret_cast<char*>(&state), sizeof(state), 0, (struct sockaddr *)&addr, sizeof(addr));
+	sendto(mSocket, reinterpret_cast<char*>(&state), sizeof(state), 0, (struct sockaddr*)&addr, sizeof(addr));
 	SocketError error;
 	error.isError = false;
 	return error;
 }
 
-UDPServerSocket::SocketError UDPServerSocket::Read(DotWarsNet & state)
+UDPClientSocket::SocketError UDPClientSocket::Read(ServerToClientState & state)
 {
 	SocketError error;
 	//セレクトでブロッキング阻止
@@ -71,7 +72,7 @@ UDPServerSocket::SocketError UDPServerSocket::Read(DotWarsNet & state)
 		error.isError = true;
 		return error;
 	}
-	DotWarsNet net;
+	ServerToClientState net;
 	if (recvfrom(mSocket, reinterpret_cast<char*>(&net), sizeof(net), 0, NULL, NULL) == SOCKET_ERROR) {
 		error.text = "読み込みエラー";
 		error.isError = true;
@@ -80,9 +81,10 @@ UDPServerSocket::SocketError UDPServerSocket::Read(DotWarsNet & state)
 	state = net;
 	error.isError = false;
 	return error;
+
 }
 
-void UDPServerSocket::CloseSocket()
+void UDPClientSocket::CloseSocket()
 {
 	closesocket(mSocket);
 }

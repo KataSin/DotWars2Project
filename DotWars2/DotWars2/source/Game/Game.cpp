@@ -82,33 +82,86 @@ void Game::Update()
 		case 3: {
 			debug = "TCP終了";
 			mServerManager->Close();
+			//UDP通信開始
+			mUdpServerManager = new UDPServerSocketManager();
+			//TCPで取ったクライアントの情報をUDPに渡す
+			for (const auto& i : mServerManager->GetConnectSockets()) {
+				mUdpServerManager->AddClientAdd(i);
+			}
+			//状態を初期化
+			mUdpServerManager->SetState(mServerManager->GetFirstState());
+			stageNum++;
+			break;
+		}
+		case 4: {
+			mUdpServerManager->Read();
+
+			auto s = mUdpServerManager->GetState();
+			debug = "Player1 PosX:" + std::to_string(s.states[0].position.x) + "PosY" + std::to_string(s.states[0].position.y)+
+				"Player2 PosX:" + std::to_string(s.states[1].position.x) + "PosY" + std::to_string(s.states[1].position.y);
+
+			mUdpServerManager->Send();
 			break;
 		}
 		}
 	}
 	else
 	{
+		FirstToClientState state;
 		switch (stageNum)
 		{
 		case 0: {
 			debug = "サーバーに接続中";
-			if (mClientManager->Connect("127.0.0.1", 12345))
+			if (mClientManager->Connect("127.0.0.1", 1234567))
 				stageNum++;
 			break;
 		}
 		case 1: {
 			debug = "情報取得中";
-			FirstToClientState state;
+
 			if (mClientManager->Read(state)) {
 				std::string text;
 				//デバッグ用
 				debug = "playerNum:" + std::to_string(state.playerNum) + "PositionX:" + std::to_string(state.position.x) + "PositionY:" + std::to_string(state.position.y);
+				//受け取った情報をもらう
+				mClientState.playerNum = state.playerNum;
+				mClientState.position = state.position;
 				stageNum++;
 			}
 			break;
 		}
 		case 2: {
 			mClientManager->Close();
+			//UDP開始
+			mUdpClientManager = new UDPClientSocketManager();
+			mUdpClientManager->Bind(state);
+			mUdpClientManager->SetServerAddr(mClientManager->GetServerAddr());
+			stageNum++;
+			break;
+		}
+		case 3:
+		{
+			
+			if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::A)) {
+				mClientState.position.x -= 1.0f*Time::GetInstance().DeltaTime();
+			}
+			if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::S)) {
+				mClientState.position.y -= 1.0f*Time::GetInstance().DeltaTime();
+			}
+			if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::D)) {
+				mClientState.position.x += 1.0f*Time::GetInstance().DeltaTime();
+			}
+			if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::W)) {
+				mClientState.position.y += 1.0f*Time::GetInstance().DeltaTime();
+			}
+			
+			debug = "PosX:" + std::to_string(mClientState.position.x) + "PosY:" + std::to_string(mClientState.position.y);
+			
+			mUdpClientManager->SetState(mClientState);
+
+			mUdpClientManager->Send();
+			mUdpClientManager->Read();
+
 			break;
 		}
 		}

@@ -20,6 +20,8 @@ public:
 	bool Close();
 	//接続してきたソケットたちを取得
 	std::vector<TCPClientSocketPtr>GetConnectSockets();
+	//最初の情報をServerToClientStateで持ってくる
+	ServerToClientState GetFirstState();
 private:
 	//接続待ちする人数
 	int mPlayerNum;
@@ -29,4 +31,7 @@ private:
 	std::vector<TCPClientSocketPtr> mClientSockets;
 
 	TCPServerSocketPtr mSocket;
+
+	//クライアントに送るサーバー情報
+	ServerToClientState mServerToState;
 };
