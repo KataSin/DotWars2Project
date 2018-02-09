@@ -54,10 +54,14 @@ private:
 	//シーンマネージャー
 	SceneManagerPtr mSceneManager;
 
+	int serverCount;
+
 	int stageNum;
 	
 
 	int playerNum;
+
+	FirstToClientState mFirstState;
 
 	DotWarsNet mClientState;
 	std::string debug;

@@ -46,7 +46,7 @@ void Game::Start()
 		mClientManager = new TCPClientSocketManager();
 	}
 
-
+	serverCount = 0;
 	stageNum = 0;
 	//mSceneManager->sceneStart();
 	////シーン追加
@@ -58,6 +58,7 @@ void Game::Start()
 
 void Game::Update()
 {
+	serverCount++;
 	if (serverFlag) {
 		switch (stageNum)
 		{
@@ -95,11 +96,10 @@ void Game::Update()
 		}
 		case 4: {
 			mUdpServerManager->Read();
-
-			auto s = mUdpServerManager->GetState();
+			ServerToClientState s = mUdpServerManager->GetState();
 			debug = "Player1 PosX:" + std::to_string(s.states[0].position.x) + "PosY" + std::to_string(s.states[0].position.y)+
 				"Player2 PosX:" + std::to_string(s.states[1].position.x) + "PosY" + std::to_string(s.states[1].position.y);
-
+			if(serverCount%15==0)
 			mUdpServerManager->Send();
 			break;
 		}
@@ -107,7 +107,6 @@ void Game::Update()
 	}
 	else
 	{
-		FirstToClientState state;
 		switch (stageNum)
 		{
 		case 0: {
@@ -119,13 +118,13 @@ void Game::Update()
 		case 1: {
 			debug = "情報取得中";
 
-			if (mClientManager->Read(state)) {
+			if (mClientManager->Read(mFirstState)) {
 				std::string text;
 				//デバッグ用
-				debug = "playerNum:" + std::to_string(state.playerNum) + "PositionX:" + std::to_string(state.position.x) + "PositionY:" + std::to_string(state.position.y);
+				debug = "playerNum:" + std::to_string(mFirstState.playerNum) + "PositionX:" + std::to_string(mFirstState.position.x) + "PositionY:" + std::to_string(mFirstState.position.y);
 				//受け取った情報をもらう
-				mClientState.playerNum = state.playerNum;
-				mClientState.position = state.position;
+				mClientState.playerNum = mFirstState.playerNum;
+				mClientState.position = mFirstState.position;
 				stageNum++;
 			}
 			break;
@@ -134,7 +133,7 @@ void Game::Update()
 			mClientManager->Close();
 			//UDP開始
 			mUdpClientManager = new UDPClientSocketManager();
-			mUdpClientManager->Bind(state);
+			mUdpClientManager->Bind(mFirstState);
 			mUdpClientManager->SetServerAddr(mClientManager->GetServerAddr());
 			stageNum++;
 			break;
@@ -142,23 +141,23 @@ void Game::Update()
 		case 3:
 		{
 			
-			if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::A)) {
+			if (Keyboard::GetInstance().KeyStateDown(KEYCODE::A)) {
 				mClientState.position.x -= 1.0f*Time::GetInstance().DeltaTime();
 			}
-			if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::S)) {
+			if (Keyboard::GetInstance().KeyStateDown(KEYCODE::S)) {
 				mClientState.position.y -= 1.0f*Time::GetInstance().DeltaTime();
 			}
-			if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::D)) {
+			if (Keyboard::GetInstance().KeyStateDown(KEYCODE::D)) {
 				mClientState.position.x += 1.0f*Time::GetInstance().DeltaTime();
 			}
-			if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::W)) {
+			if (Keyboard::GetInstance().KeyStateDown(KEYCODE::W)) {
 				mClientState.position.y += 1.0f*Time::GetInstance().DeltaTime();
 			}
 			
 			debug = "PosX:" + std::to_string(mClientState.position.x) + "PosY:" + std::to_string(mClientState.position.y);
 			
 			mUdpClientManager->SetState(mClientState);
-
+			if (serverCount % 15 == 0)
 			mUdpClientManager->Send();
 			mUdpClientManager->Read();
 

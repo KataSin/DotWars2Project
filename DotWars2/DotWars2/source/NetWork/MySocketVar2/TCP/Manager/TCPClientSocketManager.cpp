@@ -14,6 +14,7 @@ bool TCPClientSocketManager::Connect(std::string addr,int port)
 {
 	if (!mSocket->ConnectSocket(addr, port).isError) {
 		//接続先のサーバーアドレスを設定
+		mServerAddr.sin_family = AF_INET;
 		mServerAddr.sin_addr.S_un.S_addr = inet_addr(addr.c_str());
 		mServerAddr.sin_port = htons(1234567);
 		return true;

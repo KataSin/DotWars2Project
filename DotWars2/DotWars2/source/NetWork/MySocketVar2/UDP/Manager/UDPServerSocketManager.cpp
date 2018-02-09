@@ -33,9 +33,9 @@ void UDPServerSocketManager::Send()
 	int count = 12345;
 	//アドレスが一緒のためポート番号を分ける
 	for (auto i : mClients) {
-		struct sockaddr_in add;
+		sockaddr_in add;
 		add = i->GetAddr();
-		add.sin_port = htonl(count);
+		add.sin_port = htons(count);
 		mSocket->Send(add, mServerState);
 		count++;
 	}
