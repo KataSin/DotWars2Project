@@ -1,6 +1,6 @@
 #pragma once
 #include "../Actor.h"
-
+class ActionManager;
 
 class Player :public Actor {
 public:
@@ -31,4 +31,6 @@ public:
 
 private:
 	Vector3 mPosition;
+
+	ActionManager* mActionManager;
 };
