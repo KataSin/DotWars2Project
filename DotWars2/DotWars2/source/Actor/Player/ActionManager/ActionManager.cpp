@@ -1,8 +1,11 @@
 #include "ActionManager.h"
+
 #include "../Action/Move/PlayerMove.h"
+#include "../Action/Idle/PlayerIdle.h"
 ActionManager::ActionManager(IWorld & world, Parameter& parameter)
 {
 	mActions[ActionBehavior::WALK] = new PlayerMove(world, *this, parameter);
+	mActions[ActionBehavior::IDLE] = new PlayerIdle(world, *this, parameter);
 }
 
 ActionManager::~ActionManager()
@@ -43,7 +46,13 @@ void ActionManager::Update()
 			//次のアクションのスタートを呼ぶ
 			if (!mActionStates.empty())
 				mActions[mActionStates.front().behacior]->Start();
+			else
+				mActions[ActionBehavior::IDLE]->Start();
 		}
+	}
+	else
+	{
+		mActions[ActionBehavior::IDLE]->Update();
 	}
 }
 

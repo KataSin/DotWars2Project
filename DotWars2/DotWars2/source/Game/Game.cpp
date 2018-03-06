@@ -10,18 +10,19 @@
 //その他
 #include "../Time/Time.h"
 #include "../Utility/Input/Keyboard/Keyboard.h"
+#include "../Graphic/ModelAnim/ModelAnim.h"
 Game::Game(int windowWight, int windowHeght, bool fullScene)
 {
 	// 画面モードのセット
 	SetGraphMode(windowWight, windowHeght, 16);
 	//ウィンドウモードに
 	ChangeWindowMode(fullScene ? FALSE : TRUE);
-	////ワールドマネージャー
-	//mWorldManager = std::make_shared<WorldManager>();
-	//mWorldManager->Add(WORLD_ID::GAME_WORLD, std::make_shared<World>(mWorldManager));
+	//ワールドマネージャー
+	mWorldManager = std::make_shared<WorldManager>();
+	mWorldManager->Add(WORLD_ID::GAME_WORLD, std::make_shared<World>(mWorldManager));
 
-	////シーンマネージャー
-	//mSceneManager = std::make_shared<SceneManager>();
+	//シーンマネージャー
+	mSceneManager = std::make_shared<SceneManager>();
 
 
 
@@ -168,11 +169,13 @@ void Game::Update()
 	//}
 
 
+	
 	//キーボードアップデート
 	Keyboard::GetInstance().Update();
 	//タイムアップデート
 	Time::GetInstance().Update();
-
+	//モデルアニメーションアップデート
+	ModelAnim::GetInstance().Update();
 
 	//シーンマネージャーアップデート
 	mSceneManager->sceneUpdate();
@@ -188,7 +191,6 @@ void Game::Draw() const
 
 void Game::End()
 {
-	//delete clientManager;
-	//mSceneManager->sceneEnd();
-	//mWorldManager->ManagerClear();
+	mSceneManager->sceneEnd();
+	mWorldManager->ManagerClear();
 }

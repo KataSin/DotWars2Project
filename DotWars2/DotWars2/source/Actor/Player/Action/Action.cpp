@@ -1,6 +1,6 @@
 #include "Action.h"
 #include "../../../World/IWorld.h"
-#include "../ActionManager/ActionManager.h"
+#include "../IActionManager/IActionManager.h"
 #include "../../Actor.h"
 Action::Action(IWorld & world, IActionManager& actionManager, Parameter& parameter):
 	mParameter(parameter),

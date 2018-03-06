@@ -1,5 +1,6 @@
 #include "Player.h"
 #include "../../Graphic/ModelAnim/ModelAnim.h"
+#include "../../Graphic/Model/Model.h"
 #include "../../Graphic/Sprite/Sprite.h"
 #include "../../Utility/Input/Keyboard/Keyboard.h"
 #include "../../Time/Time.h"
@@ -10,7 +11,7 @@ Player::Player(IWorld & world, const Matrix4 & mat) :
 	mParameter.isDead = false;
 	mPosition = Vector3::Zero;
 	mParameter.mat =
-		Matrix4::Scale(0)*
+		Matrix4::Scale(1)*
 		Matrix4::RotateX(0)*
 		Matrix4::RotateY(0)*
 		Matrix4::RotateZ(0)*
@@ -30,15 +31,13 @@ void Player::Update()
 {
 	mWorld.Collision(ACTOR_ID::ENEMY_ACTOR, COL_ID::PLAYER_ENEMY_COL, *this);
 
-	//mActionManager->Update();
+	mActionManager->Update();
 }
 
 void Player::Draw() const
 {
-	SetUseLighting(false);
+
 	ModelAnim::GetInstance().Draw(MODEL_ANIM_ID::PLAYER_MODEL_ANIM, mParameter.mat);
-	SetUseLighting(true);
-	//Model::GetInstance().Draw(MODEL_ID::PLAYER_MODEL, Matrix4::Identity);
 }
 
 void Player::Collision(Actor & other)
