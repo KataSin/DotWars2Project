@@ -3,6 +3,7 @@
 
 #include "../../../../Utility/Input/Keyboard/Keyboard.h"
 #include "../../../../Graphic/ModelAnim/ModelAnim.h"
+#include "../../../../Camera/Camera.h"
 PlayerIdle::PlayerIdle(IWorld & world, IActionManager & actionManager, Parameter & parameter) :
 	Action(world, actionManager, parameter)
 {
@@ -21,15 +22,19 @@ void PlayerIdle::Start()
 void PlayerIdle::Update()
 {
 	DrawString(0, 32, "é~Ç‹Ç¡ÇƒÇ‹Ç∑", GetColor(255, 255, 255));
-
+	//ÉvÉåÉCÉÑÅ[ÇÃìÆÇ´
 	if (Keyboard::GetInstance().KeyStateDown(KEYCODE::A) ||
 		Keyboard::GetInstance().KeyStateDown(KEYCODE::S) ||
 		Keyboard::GetInstance().KeyStateDown(KEYCODE::D) ||
 		Keyboard::GetInstance().KeyStateDown(KEYCODE::W)) {
-		mActionManager.ChangeAction(ActionBehavior::WALK,true);
+		mActionManager.ChangeAction(ActionBehavior::MOVE,true);
 	}
 }
 
 void PlayerIdle::End()
+{
+}
+
+void PlayerIdle::Collision(Actor & other, const CollisionParameter & parameter)
 {
 }

@@ -1,7 +1,8 @@
 #pragma once
 enum ACTOR_ID {
 	PLAYER_ACTOR,
-	ENEMY_ACTOR
+	ENEMY_ACTOR,
+	CAMERA_ACTOR
 };
 
 enum COL_ID {

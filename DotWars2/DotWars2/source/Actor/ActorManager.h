@@ -18,6 +18,8 @@ public:
 	/// </summary>
 	/// <returns>アクターたち</returns>
 	std::list<ActorPtr>GetActors();
+
+	void Start();
 	void Update();
 	void Draw()const;
 private:

@@ -15,6 +15,10 @@ public:
 	/// </summary>
 	virtual ~Enemy()override;
 	/// <summary>
+	/// スタート
+	/// </summary>
+	virtual void Start() override;
+	/// <summary>
 	/// アップデート
 	/// </summary>
 	virtual void Update() override;
@@ -26,5 +30,5 @@ public:
 	///	当たり判定
 	/// </summary>
 	/// <param name="other">当たったオブジェクト</param>
-	virtual void Collision(Actor& other)override;
+	virtual void Collision(Actor& other, const CollisionParameter& parameter)override;
 };

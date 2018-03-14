@@ -1,11 +1,12 @@
 #pragma once
 
 #include "../Action.h"
-class PlayerMove :public Action
+class PlayerMoveAttack :public Action
 {
 public:
-	PlayerMove(IWorld & world, IActionManager& actionManager, Parameter& parameter);
-	virtual ~PlayerMove() override;
+	PlayerMoveAttack(IWorld & world, IActionManager& actionManager, Parameter& parameter);
+	
+	virtual ~PlayerMoveAttack() override;
 
 	virtual void Start() override;
 
@@ -16,9 +17,9 @@ public:
 	virtual void Collision(Actor& other, const CollisionParameter& parameter) override;
 
 private:
+	//カメラアクター
 	ActorPtr mCameraActor;
 	//座標
 	Vector3 mPosition;
-	//動いているベクトル
-	Vector3 mMovemVec;
+
 };

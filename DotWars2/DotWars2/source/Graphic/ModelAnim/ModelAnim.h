@@ -96,6 +96,7 @@ private:
 			int index;
 			float animTime;
 			float animAllTime;
+			float blendNum;
 		};
 	public:
 		ModelAnimHandle();

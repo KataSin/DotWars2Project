@@ -13,6 +13,7 @@ public:
 
 	virtual void End() = 0;
 
+	virtual void Collision(Actor& other, const CollisionParameter& parameter) = 0;
 
 	bool GetEnd();
 protected:

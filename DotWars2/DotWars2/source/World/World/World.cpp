@@ -13,6 +13,14 @@ World::~World()
 {
 }
 
+void World::Start()
+{
+	for (auto& i : mActors) {
+		i.second.Start();
+	}
+
+}
+
 void World::Update()
 {
 	for (auto& i : mActors) {
@@ -35,9 +43,11 @@ void World::Add(const ACTOR_ID & id, ActorPtr actor)
 void World::Collision(const ACTOR_ID & id, const COL_ID & colId,Actor & actor)
 {
 	for (const auto& i : FindActors(id)) {
-		if (m_Cols[colId](*i, actor).colFlag) {
-			i->Collision(actor);
-			actor.Collision(*i);
+		CollisionParameter parameter;
+		parameter = m_Cols[colId](*i, actor);
+		if (parameter.colFlag) {
+			i->Collision(actor,parameter);
+			actor.Collision(*i,parameter);
 		}
 	}
 }

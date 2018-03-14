@@ -17,6 +17,11 @@ std::list<ActorPtr> ActorManager::GetActors()
 {
 	return mActors;
 }
+void ActorManager::Start()
+{
+	std::for_each(mActors.begin(), mActors.end(),
+		[](ActorPtr actor) {actor->Start(); });
+}
 void ActorManager::Update()
 {
 	std::for_each(mActors.begin(), mActors.end(),

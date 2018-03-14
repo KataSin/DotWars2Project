@@ -1,16 +1,16 @@
 #include "ActionManager.h"
 
-#include "../Action/Move/PlayerMove.h"
-#include "../Action/Idle/PlayerIdle.h"
 ActionManager::ActionManager(IWorld & world, Parameter& parameter)
 {
-	mActions[ActionBehavior::WALK] = new PlayerMove(world, *this, parameter);
-	mActions[ActionBehavior::IDLE] = new PlayerIdle(world, *this, parameter);
+	//mActions[ActionBehavior::WALK] = new PlayerMove(world, *this, parameter);
+	//mActions[ActionBehavior::IDLE] = new PlayerIdle(world, *this, parameter);
 }
 
 ActionManager::~ActionManager()
 {
-	delete mActions[ActionBehavior::WALK];
+	for (const auto& i: mActions) {
+		delete i.second;
+	}
 }
 
 void ActionManager::ChangeAction(ActionBehavior behavior, bool topPriority)
@@ -32,6 +32,10 @@ void ActionManager::ChangeAction(ActionBehavior behavior, bool topPriority)
 		mActions[mActionStates.front().behacior]->Start();
 
 
+}
+void ActionManager::AddAction(ActionBehavior state, Action * action)
+{
+	mActions[state] = action;
 }
 void ActionManager::Update()
 {
@@ -56,7 +60,12 @@ void ActionManager::Update()
 	}
 }
 
-ActionManager::ActionState ActionManager::GetState()
+ActionBehavior ActionManager::GetState()
 {
-	return mActionStates.front();
+	return mActionStates.front().behacior;
+}
+
+void ActionManager::Collision(Actor & other, const CollisionParameter & parameter)
+{
+	mActions[mActionStates.front().behacior]->Collision(other, parameter);
 }

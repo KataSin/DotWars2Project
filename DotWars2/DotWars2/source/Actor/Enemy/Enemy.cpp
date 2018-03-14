@@ -15,6 +15,10 @@ Enemy::~Enemy()
 {
 }
 
+void Enemy::Start()
+{
+}
+
 void Enemy::Update()
 {
 	
@@ -27,6 +31,6 @@ void Enemy::Draw() const
 	SetUseLighting(true);
 }
 
-void Enemy::Collision(Actor & other)
+void Enemy::Collision(Actor& other, const CollisionParameter& parameter)
 {
 }

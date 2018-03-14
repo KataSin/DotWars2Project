@@ -27,6 +27,10 @@ public:
 	/// </summary>
 	virtual ~Actor();
 	/// <summary>
+	/// スタート
+	/// </summary>
+	virtual void Start() = 0;
+	/// <summary>
 	/// アップデート
 	/// </summary>
 	virtual void Update() = 0;
@@ -38,7 +42,7 @@ public:
 	///	当たり判定
 	/// </summary>
 	/// <param name="other">当たったオブジェクト</param>
-	virtual void Collision(Actor& other) = 0;
+	virtual void Collision(Actor& other, const CollisionParameter& parameter) = 0;
 	/// <summary>
 	///	死んでいるか取得
 	/// </summary>

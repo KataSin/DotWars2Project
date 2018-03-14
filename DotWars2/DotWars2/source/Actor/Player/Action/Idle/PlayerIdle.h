@@ -13,6 +13,8 @@ public:
 
 	virtual void End() override;
 
+	virtual void Collision(Actor& other, const CollisionParameter& parameter);
+
 private:
 	Vector3 mPosition;
 

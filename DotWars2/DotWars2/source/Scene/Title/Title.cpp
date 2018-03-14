@@ -5,7 +5,7 @@
 
 #include "../../Graphic/ModelAnim/ModelAnim.h"
 #include "../../Camera/Camera.h"
-
+#include "../../Actor/CameraActor/CameraActor.h"
 
 #include "../../Graphic/Model/Model.h"
 Title::Title(WorldManagerPtr manager) :
@@ -30,19 +30,16 @@ void Title::Start()
 	//ゲームプレイワールドに追加
 	auto gamePlayWorld = mWorldManager->GetWorld(WORLD_ID::GAME_WORLD);
 	gamePlayWorld->Add(ACTOR_ID::PLAYER_ACTOR, std::make_shared<Player>(*gamePlayWorld, Matrix4::Identity));
+
+
+	//アクタースタート
+	gamePlayWorld->Start();
+
 }
 
 void Title::Update()
 {
 	mWorldManager->Update();
-
-	Camera::GetInstance().SetPosition(Vector3(20, 20, 20));
-	Camera::GetInstance().SetTarget(Vector3(0, 0, 0));
-	Camera::GetInstance().SetRange(0.5f, 1000.0f);
-	Camera::GetInstance().SetCameraVec(Vector3::Up);
-	Camera::GetInstance().SetView(60.0f);
-	Camera::GetInstance().Update();
-
 	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::SPACE)) {
 		mIsEnd = true;
 	}
@@ -51,6 +48,10 @@ void Title::Update()
 void Title::Draw() const
 {
 	DrawString(0, 0, "タイトルシーン", GetColor(255, 255, 255));
+	DrawSphere3D(Vector3::ToVECTOR(Vector3::Zero), 10, 10, GetColor(255, 255, 255), GetColor(255, 255, 255), TRUE);
+
+	DrawSphere3D(Vector3::ToVECTOR(Vector3(100,0,100)), 10, 10, GetColor(255, 255, 255), GetColor(255, 255, 255), TRUE);
+
 	mWorldManager->Draw();
 
 }

@@ -1,19 +1,19 @@
 #pragma once
 #include "../Actor.h"
-#include "ActionManager\ActionManager.h"
+class ActionManager;
 
-class Player :public Actor {
+class CameraActor :public Actor {
 public:
 	/// <summary>
 	/// コンストラクタ
 	/// </summary>
 	/// <param name="world">ワールド</param>
 	/// <param name="mat">マトリクス</param>
-	Player(IWorld& world, const Matrix4& mat);
+	CameraActor(IWorld& world);
 	/// <summary>
 	/// デストラクタ
 	/// </summary>
-	virtual ~Player()override;
+	virtual ~CameraActor()override;
 	/// <summary>
 	/// スタート
 	/// </summary>
@@ -30,15 +30,15 @@ public:
 	///	当たり判定
 	/// </summary>
 	/// <param name="other">当たったオブジェクト</param>
-	virtual void Collision(Actor& other, const CollisionParameter& parameter)override;
-	/// <summary>
-	/// プレイヤーの状態を取得する
-	/// </summary>
-	ActionBehavior GetState();
+	virtual void  Collision(Actor& other, const CollisionParameter& parameter)override;
 
 private:
+	//プレイヤー情報
+	ActorPtr mPlayer;
+	//カメラの座標
 	Vector3 mPosition;
-
-	ActionManager* mPlayerActionManager;
-	ActionManager* mCameraActionManager;
+	//回転情報
+	Vector3 mRotate;
+	//注視点
+	Vector3 mTargetPos;
 };

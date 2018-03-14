@@ -25,6 +25,7 @@ void ModelAnim::ModelAnimHandle::Load(const std::string fileName, const MODEL_MO
 	handle = MV1LoadModel(fileName.c_str());
 	CurMotionId = motionId;
 	PreMotionId = motionId;
+	Attach(motionId);
 }
 
 void ModelAnim::ModelAnimHandle::Delete()
@@ -36,9 +37,15 @@ void ModelAnim::ModelAnimHandle::Delete()
 
 void ModelAnim::ModelAnimHandle::Attach(const MODEL_MOTION_ID & motionId)
 {
+	if (mAttachNums.count(motionId) > 0)return;
+	//アタッチされたインデックス番号
 	mAttachNums[motionId].index = MV1AttachAnim(handle, motionId);
-	mAttachNums[motionId].animAllTime = MV1GetAttachAnimTotalTime(handle, motionId);
+	//アニメーション総時間
+	mAttachNums[motionId].animAllTime = MV1GetAttachAnimTotalTime(handle, mAttachNums[motionId].index);
+	//アニメーション時間
 	mAttachNums[motionId].animTime = 0.0f;
+	//ブレンド率
+	mAttachNums[motionId].blendNum = 0.0f;
 }
 
 void ModelAnim::ModelAnimHandle::Detach(const MODEL_MOTION_ID & motionId)
@@ -74,34 +81,40 @@ void ModelAnim::ModelAnimHandle::StopAnim()
 
 void ModelAnim::ModelAnimHandle::ChangeAnim(const MODEL_MOTION_ID & motionId)
 {
-	if (isLerpAnim || (CurMotionId == motionId))return;
-	isLerpAnim = true;
-	Attach(motionId);
+	if (motionId == CurMotionId||isLerpAnim)return;
+
+	//現在の再生アニメーションを変更
 	CurMotionId = motionId;
+	Attach(motionId);
+	lerpAnimTime = 0.0f;
+	isLerpAnim = true;
+
 }
 
 void ModelAnim::ModelAnimHandle::Update()
 {
-	if (!isPlay)return;
-	for (auto & i = mAttachNums.begin(); i != mAttachNums.end(); ++i) {
-		i->second.animTime += 20.0f*Time::GetInstance().DeltaTime();
-		if (i->second.animTime > i->second.animAllTime) i->second.animTime = 0.0f;
-		SetAnimTime(i->first, i->second.animTime);
-	}
 
-	if (CurMotionId != PreMotionId) {
-		lerpAnimTime += Time::GetInstance().DeltaTime();
-		lerpAnimTime = Math::Clamp(lerpAnimTime, 0.0f, 1.0f);
-		MV1SetAttachAnimBlendRate(handle, PreMotionId, 1.0f - lerpAnimTime);
-		MV1SetAttachAnimBlendRate(handle, CurMotionId, lerpAnimTime);
+	if (PreMotionId != CurMotionId) {
 
-		if (lerpAnimTime >= 1.0f) {
-			Detach(PreMotionId);
+		mAttachNums[CurMotionId].blendNum += 20.0f* Time::GetInstance().DeltaTime();
+		mAttachNums[PreMotionId].blendNum -= 20.0f* Time::GetInstance().DeltaTime();
+		//ブレンド率設定
+		MV1SetAttachAnimBlendRate(handle, mAttachNums[CurMotionId].index, mAttachNums[CurMotionId].blendNum);
+		MV1SetAttachAnimBlendRate(handle, mAttachNums[PreMotionId].index, mAttachNums[PreMotionId].blendNum);
+		//クランプ
+		mAttachNums[CurMotionId].blendNum = Math::Clamp(mAttachNums[CurMotionId].blendNum, 0.0f, 1.0f);
+		mAttachNums[PreMotionId].blendNum = Math::Clamp(mAttachNums[PreMotionId].blendNum, 0.0f, 1.0f);
+
+		if (mAttachNums[CurMotionId].blendNum >= 1.0f) {
+          	Detach(PreMotionId);
 			PreMotionId = CurMotionId;
-			lerpAnimTime = 0.0f;
 			isLerpAnim = false;
 		}
 	}
+
+	mAttachNums[CurMotionId].animTime += 20.0f*Time::GetInstance().DeltaTime();
+	if (mAttachNums[CurMotionId].animAllTime <= mAttachNums[CurMotionId].animTime)mAttachNums[CurMotionId].animTime = 0.0f;
+	SetAnimTime(CurMotionId, mAttachNums[CurMotionId].animTime);
 }
 
 
