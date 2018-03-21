@@ -4,6 +4,7 @@
 #include "Action\Idle\PlayerIdle.h"
 #include "Action\Move\PlayerMove.h"
 #include "Action\MoveAttack\PlayerMoveAttack.h"
+#include "Action\Jump\PlayerJump.h"
 //アクターたち
 #include "../CameraActor/CameraActor.h"
 
@@ -23,20 +24,23 @@ Player::Player(IWorld & world, const Matrix4 & mat) :
 
 	//初期設定
 	mParameter.isDead = false;
-	mPosition = Vector3::Zero;
+	mPosition = Vector3(0, 20, 0);
 	mParameter.mat =
 		Matrix4::Scale(1)*
 		Matrix4::RotateX(0)*
 		Matrix4::RotateY(0)*
 		Matrix4::RotateZ(0)*
-		Matrix4::Translate(Vector3::Zero);
+		Matrix4::Translate(mPosition);
 	//アクションクラスを設定
 	mPlayerActionManager = new ActionManager(world, mParameter);
-	mPlayerActionManager->AddAction(ActionBehavior::IDLE, new PlayerIdle(world, *mPlayerActionManager, mParameter));
-	mPlayerActionManager->AddAction(ActionBehavior::MOVE, new PlayerMove(world, *mPlayerActionManager, mParameter));
-	mPlayerActionManager->AddAction(ActionBehavior::ATTACK_MOVE, new PlayerMoveAttack(world, *mPlayerActionManager, mParameter));
+	mPlayerActionManager->AddAction(ActionBehavior::IDLE, new PlayerIdle(this, world, *mPlayerActionManager, mParameter));
+	mPlayerActionManager->AddAction(ActionBehavior::MOVE, new PlayerMove(this, world, *mPlayerActionManager, mParameter));
+	mPlayerActionManager->AddAction(ActionBehavior::ATTACK_MOVE, new PlayerMoveAttack(this, world, *mPlayerActionManager, mParameter));
+	mPlayerActionManager->AddAction(ActionBehavior::JUMP, new PlayerJump(this, world, *mPlayerActionManager, mParameter));
 	//アクションを待機に設定
 	mPlayerActionManager->ChangeAction(ActionBehavior::IDLE);
+
+	mVelo = Vector3::Zero;
 }
 
 Player::~Player()
@@ -51,8 +55,17 @@ void Player::Start()
 void Player::Update()
 {
 	mWorld.Collision(ACTOR_ID::ENEMY_ACTOR, COL_ID::PLAYER_ENEMY_COL, *this);
+	
 
+	//アクションアップデート
 	mPlayerActionManager->Update();
+
+	//全アクション共通アップデート
+	mParameter.mat.SetPosition(mVelo + mParameter.mat.GetPosition());
+	//重力
+	mVelo.y -= 5.0f*Time::GetInstance().DeltaTime();
+	mVelo.y = Math::Clamp(mVelo.y, -10.0f, 1000.0f);
+
 }
 
 void Player::Draw() const
@@ -68,4 +81,14 @@ void Player::Collision(Actor& other, const CollisionParameter& parameter)
 ActionBehavior Player::GetState()
 {
 	return mPlayerActionManager->GetState();
+}
+
+void Player::SetPlusVelo(const Vector3 velocity)
+{
+	mVelo += velocity;
+}
+
+void Player::SetVeloY(float velocityY)
+{
+	mVelo.y = velocityY;
 }

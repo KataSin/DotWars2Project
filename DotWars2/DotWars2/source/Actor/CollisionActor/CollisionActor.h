@@ -16,6 +16,14 @@ public:
 	/// <returns>コリジョンパラメーター</returns>
 	static CollisionParameter Player_Enemy_Col(const Actor & actor1, const Actor & actor2);
 	/// <summary>
+	/// プレイヤーと床プレートの当たり判定
+	/// </summary>
+	/// <param name="actor1">プレイヤー</param>
+	/// <param name="actor2">プレート</param>
+	/// <returns></returns>
+	static CollisionParameter Player_Plate_Col(const Actor & actor1, const Actor & actor2);
+
+	/// <summary>
 	/// コリジョン情報を取得
 	/// </summary>
 	/// <returns>コリジョン情報</returns>

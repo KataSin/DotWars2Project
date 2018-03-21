@@ -1,19 +1,17 @@
 #pragma once
 #include "../Actor.h"
-#include "ActionManager\ActionManager.h"
-
-class Player :public Actor {
+class PlayerBullet :Actor {
 public:
 	/// <summary>
 	/// コンストラクタ
 	/// </summary>
 	/// <param name="world">ワールド</param>
 	/// <param name="mat">マトリクス</param>
-	Player(IWorld& world, const Matrix4& mat);
+	PlayerBullet(IWorld& world, const Vector3& position);
 	/// <summary>
 	/// デストラクタ
 	/// </summary>
-	virtual ~Player()override;
+	virtual ~PlayerBullet()override;
 	/// <summary>
 	/// スタート
 	/// </summary>
@@ -31,26 +29,6 @@ public:
 	/// </summary>
 	/// <param name="other">当たったオブジェクト</param>
 	virtual void Collision(Actor& other, const CollisionParameter& parameter)override;
-	/// <summary>
-	/// プレイヤーの状態を取得する
-	/// </summary>
-	ActionBehavior GetState();
-	/// <summary>
-	/// プレイヤーに速度を足す
-	/// </summary>
-	/// <param name="velocity"></param>
-	void SetPlusVelo(const Vector3 velocity);
-	/// <summary>
-	/// プレイヤーのY軸速度を設定する
-	/// </summary>
-	/// <param name="velocity"></param>
-	void SetVeloY(float velocityY);
 private:
-	Vector3 mPosition;
-
-	//速度
-	Vector3 mVelo;
-
-	ActionManager* mPlayerActionManager;
-	ActionManager* mCameraActionManager;
+	Vector4 mColor;
 };

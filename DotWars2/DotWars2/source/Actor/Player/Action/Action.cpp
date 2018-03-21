@@ -2,11 +2,12 @@
 #include "../../../World/IWorld.h"
 #include "../IActionManager/IActionManager.h"
 #include "../../Actor.h"
-Action::Action(IWorld & world, IActionManager& actionManager, Parameter& parameter):
+Action::Action(Actor* actor, IWorld & world, IActionManager& actionManager, Parameter& parameter):
 	mParameter(parameter),
 	mWorld(world),
 	mActionManager(actionManager),
-	mIsEnd(false)
+	mIsEnd(false),
+	mMyActor(actor)
 {
 }
 

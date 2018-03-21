@@ -1,19 +1,19 @@
 #pragma once
 #include "../Actor.h"
-#include "ActionManager\ActionManager.h"
 
-class Player :public Actor {
+
+class Stage :public Actor {
 public:
 	/// <summary>
 	/// コンストラクタ
 	/// </summary>
 	/// <param name="world">ワールド</param>
 	/// <param name="mat">マトリクス</param>
-	Player(IWorld& world, const Matrix4& mat);
+	Stage(IWorld& world);
 	/// <summary>
 	/// デストラクタ
 	/// </summary>
-	virtual ~Player()override;
+	virtual ~Stage()override;
 	/// <summary>
 	/// スタート
 	/// </summary>
@@ -31,26 +31,11 @@ public:
 	/// </summary>
 	/// <param name="other">当たったオブジェクト</param>
 	virtual void Collision(Actor& other, const CollisionParameter& parameter)override;
-	/// <summary>
-	/// プレイヤーの状態を取得する
-	/// </summary>
-	ActionBehavior GetState();
-	/// <summary>
-	/// プレイヤーに速度を足す
-	/// </summary>
-	/// <param name="velocity"></param>
-	void SetPlusVelo(const Vector3 velocity);
-	/// <summary>
-	/// プレイヤーのY軸速度を設定する
-	/// </summary>
-	/// <param name="velocity"></param>
-	void SetVeloY(float velocityY);
+
+
+	//ステージプレート生成
+	void PlateSpawn();
 private:
-	Vector3 mPosition;
-
-	//速度
-	Vector3 mVelo;
-
-	ActionManager* mPlayerActionManager;
-	ActionManager* mCameraActionManager;
+	//廻のステージのマトリクス
+	Matrix4 mStageMat;
 };

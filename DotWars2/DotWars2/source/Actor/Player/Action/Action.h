@@ -4,7 +4,7 @@ class IWorld;
 class IActionManager;
 class Action {
 public:
-	Action(IWorld & world, IActionManager& actionManager, Parameter& parameter);
+	Action(Actor* actor, IWorld & world, IActionManager& actionManager, Parameter& parameter);
 	virtual ~Action();
 
 	virtual void Start() = 0;
@@ -17,6 +17,9 @@ public:
 
 	bool GetEnd();
 protected:
+	//自身のアクター
+	Actor* mMyActor;
+
 	Parameter& mParameter;
 	IWorld& mWorld;
 	IActionManager& mActionManager;

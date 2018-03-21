@@ -4,7 +4,7 @@
 class PlayerMove :public Action
 {
 public:
-	PlayerMove(IWorld & world, IActionManager& actionManager, Parameter& parameter);
+	PlayerMove(Actor* actor, IWorld & world, IActionManager& actionManager, Parameter& parameter);
 	virtual ~PlayerMove() override;
 
 	virtual void Start() override;
@@ -16,6 +16,9 @@ public:
 	virtual void Collision(Actor& other, const CollisionParameter& parameter) override;
 
 private:
+	//プレイヤーアクター
+	ActorPtr mPlayerActor;
+
 	ActorPtr mCameraActor;
 	//座標
 	Vector3 mPosition;

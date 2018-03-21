@@ -4,7 +4,7 @@
 class PlayerIdle :public Action
 {
 public:
-	PlayerIdle(IWorld & world, IActionManager& actionManager, Parameter& parameter);
+	PlayerIdle(Actor* actor, IWorld & world, IActionManager& actionManager, Parameter& parameter);
 	virtual ~PlayerIdle() override;
 
 	virtual void Start() override;
@@ -16,6 +16,8 @@ public:
 	virtual void Collision(Actor& other, const CollisionParameter& parameter);
 
 private:
+	//座標
 	Vector3 mPosition;
-
+	//プレイヤーアクター
+	ActorPtr mPlayerActor;
 };

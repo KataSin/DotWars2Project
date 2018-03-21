@@ -6,15 +6,15 @@
 
 #include "../../../../Time/Time.h"
 
+#include "../../Player.h"
+
 
 //攻撃中の移動スピード
 const float ATTACK_MOVE_SPEED = 20.0f;
 
-PlayerMoveAttack::PlayerMoveAttack(IWorld & world, IActionManager & actionManager, Parameter & parameter) :
-	Action(world, actionManager, parameter)
+PlayerMoveAttack::PlayerMoveAttack(Actor* actor, IWorld & world, IActionManager & actionManager, Parameter & parameter) :
+	Action(actor,world, actionManager, parameter)
 {
-	//カメラアクター取得
-	mCameraActor = mWorld.FindActors(ACTOR_ID::CAMERA_ACTOR).front();
 }
 
 PlayerMoveAttack::~PlayerMoveAttack()
@@ -24,10 +24,15 @@ PlayerMoveAttack::~PlayerMoveAttack()
 void PlayerMoveAttack::Start()
 {
 	mPosition = mParameter.mat.GetPosition();
+	//カメラアクター取得
+	mCameraActor = mWorld.FindActors(ACTOR_ID::CAMERA_ACTOR).front();
+	mPlayerActor = mWorld.FindActors(ACTOR_ID::PLAYER_ACTOR).front();
+
 }
 
 void PlayerMoveAttack::Update()
 {
+	mPosition = mParameter.mat.GetPosition();
 	//離されていたら状態チェンジ
 	if (Keyboard::GetInstance().KeyStateUp(KEYCODE::F)) {
 		mActionManager.ChangeAction(ActionBehavior::IDLE, true);
@@ -68,4 +73,8 @@ void PlayerMoveAttack::End()
 
 void PlayerMoveAttack::Collision(Actor & other, const CollisionParameter & parameter)
 {
+	if (parameter.colID == COL_ID::PLAYER_PLATE_COL) {
+		//床に当たったら止まる
+		dynamic_cast<Player*>(mMyActor)->SetVeloY(0.0f);
+	}
 }

@@ -171,7 +171,7 @@ void ModelAnim::Draw(const MODEL_ANIM_ID & id, const Matrix4 & mat, float alpha,
 {
 	int handle = mModels[id]->GetHandle();
 	MV1SetMatrix(handle, mat.ToMATRIX());
-	MV1SetOpacityRate(handle, alpha);
-	MV1SetDifColorScale(handle, GetColorF(diffuse.x, diffuse.y, diffuse.z, diffuse.w));
+	//MV1SetOpacityRate(handle, alpha);
+	//MV1SetDifColorScale(handle, GetColorF(diffuse.x, diffuse.y, diffuse.z, diffuse.w));
 	MV1DrawModel(handle);
 }

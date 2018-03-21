@@ -43,7 +43,7 @@ void CameraActor::Start()
 
 	Camera::GetInstance().SetPosition(mParameter.mat.GetPosition());
 	Camera::GetInstance().SetTarget(mTargetPos);
-	Camera::GetInstance().SetRange(0.5f, 1000.0f);
+	Camera::GetInstance().SetRange(0.5f, 10000.0f);
 
 }
 

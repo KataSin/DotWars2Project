@@ -4,7 +4,8 @@ enum ActionBehavior
 	IDLE,
 	MOVE,
 	ATTACK_MOVE,
-	DUSH
+	DUSH,
+	JUMP
 };
 class IActionManager {
 

@@ -4,7 +4,7 @@
 class PlayerMoveAttack :public Action
 {
 public:
-	PlayerMoveAttack(IWorld & world, IActionManager& actionManager, Parameter& parameter);
+	PlayerMoveAttack(Actor* actor, IWorld & world, IActionManager& actionManager, Parameter& parameter);
 	
 	virtual ~PlayerMoveAttack() override;
 
@@ -21,5 +21,7 @@ private:
 	ActorPtr mCameraActor;
 	//座標
 	Vector3 mPosition;
+	//プレイヤーアクター
+	ActorPtr mPlayerActor;
 
 };
