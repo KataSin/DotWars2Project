@@ -33,3 +33,8 @@ void Camera::SetView(float angle)
 {
 	SetupCamera_Perspective(Math::Radian(angle));
 }
+
+Vector3 Camera::GetTarget() const
+{
+	return mTarget;
+}

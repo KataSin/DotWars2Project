@@ -24,10 +24,11 @@ void PlayerIdle::Start()
 void PlayerIdle::Update()
 {
 	DrawString(0, 32, "~‚Ü‚Á‚Ä‚Ü‚·", GetColor(255, 255, 255));
+	//ƒWƒƒƒ“ƒv
 	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::SPACE)) {
 		mActionManager.ChangeAction(ActionBehavior::JUMP, true);
 	}
-
+	//UŒ‚
 	if (Keyboard::GetInstance().KeyStateDown(KEYCODE::F)) {
 		mActionManager.ChangeAction(ActionBehavior::ATTACK_MOVE, true);
 		return;

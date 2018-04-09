@@ -23,5 +23,8 @@ private:
 	Vector3 mPosition;
 	//プレイヤーアクター
 	ActorPtr mPlayerActor;
-
+	//頂点
+	ActorPtr mVertexPos;
+	//攻撃間隔タイム
+	float mAttackTime;
 };

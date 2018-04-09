@@ -7,14 +7,16 @@
 #include "../../../../Time/Time.h"
 
 #include "../../Player.h"
-
+#include "../../../PlayerBullet/PlayerBullet.h"
 
 //UŒ‚’†‚ÌˆÚ“®ƒXƒs[ƒh
 const float ATTACK_MOVE_SPEED = 20.0f;
-
+//UŒ‚‚·‚éŠÔŠu
+const float ATTACK_BULLET_TIME = 0.5f;
 PlayerMoveAttack::PlayerMoveAttack(Actor* actor, IWorld & world, IActionManager & actionManager, Parameter & parameter) :
 	Action(actor,world, actionManager, parameter)
 {
+	mAttackTime = 0.0f;
 }
 
 PlayerMoveAttack::~PlayerMoveAttack()
@@ -27,6 +29,10 @@ void PlayerMoveAttack::Start()
 	//ƒJƒƒ‰ƒAƒNƒ^[Žæ“¾
 	mCameraActor = mWorld.FindActors(ACTOR_ID::CAMERA_ACTOR).front();
 	mPlayerActor = mWorld.FindActors(ACTOR_ID::PLAYER_ACTOR).front();
+
+	mVertexPos = mWorld.FindActors(ACTOR_ID::PLAYER_BULLET_POINT_ACTOR).front();
+
+	
 
 }
 
@@ -59,12 +65,31 @@ void PlayerMoveAttack::Update()
 		mPosition -= cameraFrontVec*ATTACK_MOVE_SPEED*Time::GetInstance().DeltaTime();
 	}
 	
+
 	mParameter.mat =
 		Matrix4::Scale(1.0f)*
 		Matrix4::RotateX(0.0f)*
 		Matrix4::RotateY(mCameraActor->GetParameter().mat.GetRotateDegree().y+180.0f)*
 		Matrix4::RotateZ(0.0f)*
 		Matrix4::Translate(mPosition);
+
+	//UŒ‚
+	mAttackTime += Time::GetInstance().DeltaTime();
+	if (mAttackTime >= ATTACK_BULLET_TIME) {
+		PlayerBullet::BulletState state;
+		//’eÝ’è
+		state.playerID = mParameter.playerID;
+		state.vertexPos = mVertexPos->GetParameter().mat.GetPosition();
+		state.spawnPos = mParameter.mat.GetPosition();
+
+		state.vertexPos = Vector3(100, 100, 100);
+		state.spawnPos = Vector3::Zero;
+
+		state.rand = Vector3::One;
+
+		mWorld.Add(ACTOR_ID::PLAYER_BULLET_ACTOR, std::make_shared<PlayerBullet>(mWorld, state));
+	}
+
 }
 
 void PlayerMoveAttack::End()

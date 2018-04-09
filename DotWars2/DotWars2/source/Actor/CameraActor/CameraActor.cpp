@@ -8,9 +8,9 @@
 //カメラの移動速度
 const float CAMERA_SPEED = 100.0f;
 //カメラの注視点の高さ
-const float CAMERA_HEIGHT = 50.0f;
+const float CAMERA_HEIGHT = 60.0f;
 //プレイヤーとカメラの距離
-const float CAMERA_PLAYER_DISTANCE = 80.0f;
+const float CAMERA_PLAYER_DISTANCE = 100.0f;
 
 CameraActor::CameraActor(IWorld & world) :
 	Actor(world)
@@ -64,17 +64,20 @@ void CameraActor::Update()
 	if (Keyboard::GetInstance().KeyStateDown(KEYCODE::DOWN)) {
 		mRotate.x -= CAMERA_SPEED*Time::GetInstance().DeltaTime();
 	}
-	
+
 	mParameter.mat =
 		Matrix4::Scale(1.0f)*
 		Matrix4::RotateX(mRotate.x)*
 		Matrix4::RotateY(mRotate.y)*
 		Matrix4::RotateZ(0.0f)*
 		Matrix4::Translate(mPlayer->GetParameter().mat.GetPosition());
+
+	mTargetPos = mPlayer->GetParameter().mat.GetPosition() + Vector3(0.0f, CAMERA_HEIGHT, 0.0f);
+
 	//カメラの座標を設定
 	Vector3 pos = mPlayer->GetParameter().mat.GetPosition() + Vector3::Up*CAMERA_HEIGHT - mParameter.mat.GetFront()*CAMERA_PLAYER_DISTANCE;
-	//注視点の設定
-	mTargetPos = mPlayer->GetParameter().mat.GetPosition() + Vector3::Up *CAMERA_HEIGHT;
+	////注視点の設定
+	//mTargetPos = mPlayer->GetParameter().mat.GetPosition() + Vector3::Up *CAMERA_HEIGHT;
 
 	//カメラの情報を更新
 	Camera::GetInstance().SetPosition(pos);

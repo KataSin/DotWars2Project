@@ -7,7 +7,7 @@
 #include "Action\Jump\PlayerJump.h"
 //アクターたち
 #include "../CameraActor/CameraActor.h"
-
+#include "../BulletPoint/BulletPoint.h"
 
 #include "../../Graphic/ModelAnim/ModelAnim.h"
 #include "../../Graphic/Model/Model.h"
@@ -20,7 +20,8 @@ Player::Player(IWorld & world, const Matrix4 & mat) :
 {
 	//プレイヤーのカメラを追加
 	mWorld.Add(ACTOR_ID::CAMERA_ACTOR, std::make_shared<CameraActor>(mWorld));
-
+	//攻撃ポイントを追加
+	mWorld.Add(ACTOR_ID::PLAYER_BULLET_POINT_ACTOR, std::make_shared<BulletPoint>(mWorld));
 
 	//初期設定
 	mParameter.isDead = false;

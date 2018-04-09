@@ -60,7 +60,7 @@ void PlayerJump::Update()
 		mPosition -= cameraFrontVec*Time::GetInstance().DeltaTime();
 		mMoveVec = -cameraFrontVec;
 	}
-	float playerAngle = Vector3::GetAngle2D(mMoveVec, Vector3::Zero);
+	float playerAngle = Vector3::GetAngle2D(Vector3::Zero, mMoveVec);
 
 
 	mParameter.mat =

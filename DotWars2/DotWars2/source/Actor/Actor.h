@@ -9,6 +9,8 @@
 #include "../World/IWorld.h"
 #include "../World/World/World.h"
 struct Parameter {
+	//プレイヤーID
+	PLAYER_ID playerID;
 	//マトリクス
 	Matrix4 mat;
 	//死んでいるか

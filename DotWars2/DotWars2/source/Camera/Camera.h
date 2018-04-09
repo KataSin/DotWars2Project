@@ -50,6 +50,11 @@ public:
 	/// </summary>
 	/// <param name="angle">角度</param>
 	void SetView(float angle);
+	/// <summary>
+	/// 注視点を取得する
+	/// </summary>
+	/// <returns>注視点</returns>
+	Vector3 GetTarget() const;
 private:
 	//注視点
 	Vector3 mTarget;
