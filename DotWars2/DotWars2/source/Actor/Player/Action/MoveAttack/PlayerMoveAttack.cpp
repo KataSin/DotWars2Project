@@ -10,11 +10,11 @@
 #include "../../../PlayerBullet/PlayerBullet.h"
 
 //攻撃中の移動スピード
-const float ATTACK_MOVE_SPEED = 20.0f;
+const float ATTACK_MOVE_SPEED = 60.0f;
 //攻撃する間隔
-const float ATTACK_BULLET_TIME = 0.5f;
+const float ATTACK_BULLET_TIME = 0.1f;
 PlayerMoveAttack::PlayerMoveAttack(Actor* actor, IWorld & world, IActionManager & actionManager, Parameter & parameter) :
-	Action(actor,world, actionManager, parameter)
+	Action(actor, world, actionManager, parameter)
 {
 	mAttackTime = 0.0f;
 }
@@ -32,7 +32,7 @@ void PlayerMoveAttack::Start()
 
 	mVertexPos = mWorld.FindActors(ACTOR_ID::PLAYER_BULLET_POINT_ACTOR).front();
 
-	
+
 
 }
 
@@ -44,10 +44,15 @@ void PlayerMoveAttack::Update()
 		mActionManager.ChangeAction(ActionBehavior::IDLE, true);
 		return;
 	}
+
+	//if (Keyboard::GetInstance().KeyStateDown(KEYCODE::SPACE)) {
+	//	mActionManager.ChangeAction(ActionBehavior::JUMP_ATTACK, true);
+	//	return;
+	//}
 	ModelAnim::GetInstance().ChangeAnim(MODEL_ANIM_ID::PLAYER_MODEL_ANIM, MODEL_MOTION_ID::PLAYER_WALK);
 	//カメラのベクトルを取得
 	Vector3 cameraLeftVec = mCameraActor->GetParameter().mat.GetLeft().Normalized();
-	Vector3 cameraFrontVec= mCameraActor->GetParameter().mat.GetFront().Normalized();
+	Vector3 cameraFrontVec = mCameraActor->GetParameter().mat.GetFront().Normalized();
 	//カメラのy軸無視
 	cameraFrontVec.y = 0.0f;
 
@@ -64,12 +69,12 @@ void PlayerMoveAttack::Update()
 	if (Keyboard::GetInstance().KeyStateDown(KEYCODE::S)) {
 		mPosition -= cameraFrontVec*ATTACK_MOVE_SPEED*Time::GetInstance().DeltaTime();
 	}
-	
+
 
 	mParameter.mat =
 		Matrix4::Scale(1.0f)*
 		Matrix4::RotateX(0.0f)*
-		Matrix4::RotateY(mCameraActor->GetParameter().mat.GetRotateDegree().y+180.0f)*
+		Matrix4::RotateY(mCameraActor->GetParameter().mat.GetRotateDegree().y)*
 		Matrix4::RotateZ(0.0f)*
 		Matrix4::Translate(mPosition);
 
@@ -82,12 +87,12 @@ void PlayerMoveAttack::Update()
 		state.vertexPos = mVertexPos->GetParameter().mat.GetPosition();
 		state.spawnPos = mParameter.mat.GetPosition();
 
-		state.vertexPos = Vector3(100, 100, 100);
-		state.spawnPos = Vector3::Zero;
 
 		state.rand = Vector3::One;
 
 		mWorld.Add(ACTOR_ID::PLAYER_BULLET_ACTOR, std::make_shared<PlayerBullet>(mWorld, state));
+
+		mAttackTime = 0.0f;
 	}
 
 }

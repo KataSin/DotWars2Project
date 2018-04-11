@@ -26,7 +26,7 @@ void World::Update()
 	for (auto& i : mActors) {
 		i.second.Update();
 	}
-	
+
 }
 void World::Draw() const
 {
@@ -40,14 +40,15 @@ void World::Add(const ACTOR_ID & id, ActorPtr actor)
 	mActors[id].Add(actor);
 }
 
-void World::Collision(const ACTOR_ID & id, const COL_ID & colId,Actor & actor)
+void World::Collision(const ACTOR_ID & id, const COL_ID & colId, Actor & actor)
 {
-	for (const auto& i : FindActors(id)) {
+	const auto& actors = FindActors(id);
+	for (const auto& i : actors) {
 		CollisionParameter parameter;
 		parameter = m_Cols[colId](*i, actor);
 		if (parameter.colFlag) {
-			i->Collision(actor,parameter);
-			actor.Collision(*i,parameter);
+			i->Collision(actor, parameter);
+			actor.Collision(*i, parameter);
 		}
 	}
 }

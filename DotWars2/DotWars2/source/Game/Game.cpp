@@ -7,6 +7,8 @@
 #include "../Scene/SceneManager/SceneManager.h"
 #include "../Scene/Title/Title.h"
 #include "../Scene/GamePlay/GamePlay.h"
+#include "../Scene/Matching/Matching.h"
+#include "../Scene/Server/Server.h"
 //その他
 #include "../Time/Time.h"
 #include "../Utility/Input/Keyboard/Keyboard.h"
@@ -38,22 +40,14 @@ void Game::Start()
 	//winsock初期化
 	WSAStartup(MAKEWORD(2, 0), &wsaData);
 	//サーバーです
-	serverFlag = true;
-	if (serverFlag) {
-		mServerManager = new TCPServerSocketManager();
-	}
-	else
-	{
-		mClientManager = new TCPClientSocketManager();
-	}
-	
-
-	serverCount = 0;
-	stageNum = 0;
 	mSceneManager->sceneStart();
 	//シーン追加
 	mSceneManager->AddScene(SceneID::TITLE_SCENE, std::make_shared<Title>(mWorldManager));
 	mSceneManager->AddScene(SceneID::GAME_PLAY_SCENE, std::make_shared<GamePlay>(mWorldManager));
+	mSceneManager->AddScene(SceneID::MATCHING_SCENE, std::make_shared<Matching>(mWorldManager));
+	mSceneManager->AddScene(SceneID::SERVER_SCENE, std::make_shared<Server>(mWorldManager));
+
+	
 	//最初のシーン
 	mSceneManager->StartScene(SceneID::TITLE_SCENE);
 }

@@ -3,12 +3,14 @@
 #include "../../IncludePtr.h"
 #include "../../World/WorldManager/WorldManager.h"
 
+#include "../../NetWork/MySocketVar2/TCP/Manager/TCPClientSocketManager.h"
 #include "../../NetWork/MySocketVar2/UDP/Manager/UDPClientSocketManager.h"
-class GamePlay :public Scene
+
+class Matching :public Scene
 {
 public:
-	GamePlay(WorldManagerPtr manager);
-	virtual ~GamePlay() override;
+	Matching(WorldManagerPtr manager);
+	virtual ~Matching() override;
 	/// <summary>
 	/// シーンスタート
 	/// </summary>
@@ -26,14 +28,21 @@ public:
 	/// </summary>
 	virtual void End() override;
 private:
+	//ワールドマネージャー
 	WorldManagerPtr mWorldManager;
-	WorldPtr mGameWorld;
-
-	//プレイヤー
-	ActorPtr mPlayer;
-	//udpマネージャー
+	//通信系
+	TCPClientSocketManager* mTCPManager;
 	UDPClientSocketManager* mUDPManager;
+	//通信どこまで行ってるか
+	int mStageNum;
+
+	//最初の情報
+	FirstToClientState mFirstState;
+	
+	//
 
 	//テスト
-	int serverCount;
+	int clientCount;
+	std::string debug;
+
 };

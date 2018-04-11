@@ -38,3 +38,8 @@ Vector3 Camera::GetTarget() const
 {
 	return mTarget;
 }
+
+Vector3 Camera::GetPosition() const
+{
+	return mPosition;
+}

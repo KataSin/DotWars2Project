@@ -32,6 +32,7 @@ void DefaultPlate::Update()
 	}
 	if (!mIsBreak) {
 		mWorld.Collision(ACTOR_ID::PLAYER_ACTOR, COL_ID::PLAYER_PLATE_COL, *this);
+		mWorld.Collision(ACTOR_ID::PLAYER_BULLET_ACTOR, COL_ID::PLATE_BULLET_COL, *this);
 
 	}
 
@@ -40,12 +41,13 @@ void DefaultPlate::Update()
 
 void DefaultPlate::Draw() const
 {
-	Model::GetInstance().Draw(MODEL_ID::DEFAULT_PLATE_MODEL, mParameter.mat);
+	if (!mIsBreak)
+		Model::GetInstance().Draw(MODEL_ID::DEFAULT_PLATE_MODEL, mParameter.mat);
 }
 
 void DefaultPlate::Collision(Actor & other, const CollisionParameter & parameter)
 {
-	//if (true) {
-	//	mPlateHp--;
-	//}
+	if (parameter.colID == COL_ID::PLATE_BULLET_COL) {
+		mPlateHp--;
+	}
 }

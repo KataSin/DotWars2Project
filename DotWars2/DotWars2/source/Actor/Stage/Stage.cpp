@@ -4,12 +4,20 @@
 
 #include "DefaultPlate\DefaultPlate.h"
 
+const int STAGE_SIZE = 16;
+
 Stage::Stage(IWorld & world) :
 	Actor(world)
 {
 	mParameter.isDead = false;
 
-	world.Add(ACTOR_ID::DEFAULT_PLATE_ACTOR, std::make_shared<DefaultPlate>(world,Matrix4::Identity));
+
+	for (int i = -STAGE_SIZE / 2; i < STAGE_SIZE/2; i++) {
+		for (int j = -STAGE_SIZE / 2; j < STAGE_SIZE/2; j++) {
+			Matrix4 mat = Matrix4::Translate(Vector3(i * 100, 0, j * 100));
+			world.Add(ACTOR_ID::DEFAULT_PLATE_ACTOR, std::make_shared<DefaultPlate>(world, mat));
+		}
+	}
 
 }
 

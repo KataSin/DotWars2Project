@@ -40,26 +40,12 @@ public:
 	/// </summary>
 	void End();
 private:
-
-	TCPClientSocketManager* mClientManager;
-	TCPServerSocketManager* mServerManager;
-
-	UDPClientSocketManager* mUdpClientManager;
-	UDPServerSocketManager* mUdpServerManager;
-
 	//サーバーかどうか
 	bool serverFlag;
 	//ワールドポインター
 	WorldManagerPtr mWorldManager;
 	//シーンマネージャー
 	SceneManagerPtr mSceneManager;
-
-	int serverCount;
-
-	int stageNum;
-	
-
-	int playerNum;
 
 	FirstToClientState mFirstState;
 

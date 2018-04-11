@@ -7,7 +7,7 @@
 #include "../../../../Utility/Input/Keyboard/Keyboard.h"
 #include "../../../../Time/Time.h"
 
-const float MOVE_SPEED = 50.0f;
+const float MOVE_SPEED = 200.0f;
 
 PlayerMove::PlayerMove(Actor* actor, IWorld & world, IActionManager& actionManager, Parameter& parameter) :
 	Action(actor, world, actionManager, parameter)

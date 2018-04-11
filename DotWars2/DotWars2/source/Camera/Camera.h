@@ -55,6 +55,11 @@ public:
 	/// </summary>
 	/// <returns>注視点</returns>
 	Vector3 GetTarget() const;
+	/// <summary>
+	/// カメラの座標を取得する
+	/// </summary>
+	/// <returns></returns>
+	Vector3 GetPosition()const;
 private:
 	//注視点
 	Vector3 mTarget;

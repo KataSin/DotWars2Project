@@ -24,5 +24,4 @@ public:
 	/// </summary>
 	virtual void End() override;
 private:
-	WorldManagerPtr mWorldManager;
 };

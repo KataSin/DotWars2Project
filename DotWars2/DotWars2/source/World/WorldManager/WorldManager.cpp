@@ -60,3 +60,23 @@ WorldPtr WorldManager::GetWorld(const WORLD_ID & id)
 {
 	return mWorlds[id].world;
 }
+
+void WorldManager::SetClientManager(TCPClientSocketManager* manager)
+{
+	mTcpManager = manager;
+}
+
+TCPClientSocketManager * WorldManager::GetClientManager()
+{
+	return mTcpManager;
+}
+
+void WorldManager::SetFirstState(const FirstToClientState & state)
+{
+	mFirstState = state;
+}
+
+FirstToClientState WorldManager::GetFirstState()
+{
+	return mFirstState;
+}

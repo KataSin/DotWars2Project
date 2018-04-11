@@ -41,6 +41,11 @@ Player::Player(IWorld & world, const Matrix4 & mat) :
 	//アクションを待機に設定
 	mPlayerActionManager->ChangeAction(ActionBehavior::IDLE);
 
+	mState.frame = 0;
+	mState.playerNum = (int)mParameter.playerID;
+	mState.position = mPosition;
+
+
 	mVelo = Vector3::Zero;
 }
 
@@ -56,7 +61,7 @@ void Player::Start()
 void Player::Update()
 {
 	mWorld.Collision(ACTOR_ID::ENEMY_ACTOR, COL_ID::PLAYER_ENEMY_COL, *this);
-	
+
 
 	//アクションアップデート
 	mPlayerActionManager->Update();
@@ -64,8 +69,13 @@ void Player::Update()
 	//全アクション共通アップデート
 	mParameter.mat.SetPosition(mVelo + mParameter.mat.GetPosition());
 	//重力
-	mVelo.y -= 5.0f*Time::GetInstance().DeltaTime();
 	mVelo.y = Math::Clamp(mVelo.y, -10.0f, 1000.0f);
+	mVelo.y -= 5.0f*Time::GetInstance().DeltaTime();
+
+	//サーバーに送る情報を設定
+	mState.position = mPosition;
+	mState.frame++;
+
 
 }
 
@@ -92,4 +102,9 @@ void Player::SetPlusVelo(const Vector3 velocity)
 void Player::SetVeloY(float velocityY)
 {
 	mVelo.y = velocityY;
+}
+
+DotWarsNet Player::GetNetState()
+{
+	return mState;
 }

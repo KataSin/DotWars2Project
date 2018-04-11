@@ -1,14 +1,17 @@
 #pragma once
+#include <string>
+
 #include "../Scene.h"
 #include "../../IncludePtr.h"
-#include "../../World/WorldManager/WorldManager.h"
 
-#include "../../NetWork/MySocketVar2/UDP/Manager/UDPClientSocketManager.h"
-class GamePlay :public Scene
+#include "../../NetWork/MySocketVar2/TCP/Manager/TCPServerSocketManager.h"
+#include "../../NetWork/MySocketVar2/UDP/Manager/UDPServerSocketManager.h"
+
+class Server :public Scene
 {
 public:
-	GamePlay(WorldManagerPtr manager);
-	virtual ~GamePlay() override;
+	Server(WorldManagerPtr manager);
+	virtual ~Server() override;
 	/// <summary>
 	/// シーンスタート
 	/// </summary>
@@ -26,14 +29,15 @@ public:
 	/// </summary>
 	virtual void End() override;
 private:
+	//ワールドマネージャー
 	WorldManagerPtr mWorldManager;
-	WorldPtr mGameWorld;
-
-	//プレイヤー
-	ActorPtr mPlayer;
-	//udpマネージャー
-	UDPClientSocketManager* mUDPManager;
+	//通信系
+	TCPServerSocketManager* mTCPManager;
+	UDPServerSocketManager* mUDPManager;
+	//通信どこまで行ってるか
+	int mStageNum;
 
 	//テスト
 	int serverCount;
+	std::string debug;
 };
