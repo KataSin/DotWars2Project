@@ -51,6 +51,16 @@ public:
 	/// </summary>
 	virtual void Clear()override;
 
+	/// <summary>
+	/// サーバーから送られてきた情報を設定
+	/// </summary>
+	/// <param name="state">情報</param>
+	virtual void SetNetState(const ServerToClientState& state)override;
+	/// <summary>
+	/// サーバーから送られてきた情報を取得
+	/// </summary>
+	virtual ServerToClientState GetNetState()override;
+
 private:
 
 	//アクター情報
@@ -59,4 +69,7 @@ private:
 	WorldManagerPtr mWorldManager;
 	//あたり判定情報
 	std::unordered_map<COL_ID, std::function<CollisionParameter(const Actor & actor1, const Actor & actor2)>> m_Cols;
+
+	//サーバーに送る情報
+	ServerToClientState mServerToClientState;
 };

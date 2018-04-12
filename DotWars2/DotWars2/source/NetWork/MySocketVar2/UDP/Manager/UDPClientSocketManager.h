@@ -23,11 +23,11 @@ public:
 	/// 情報を送る
 	/// </summary>
 	void Send();
-	/// <summary>
-	/// 情報を受信
-	/// </summary>
-	/// <returns></returns>
-	ServerToClientState GetState();
+	///// <summary>
+	///// 情報を受信
+	///// </summary>
+	///// <returns></returns>
+	//ServerToClientState GetState();
 	/// <summary>
 	/// ソケットを閉じる
 	/// </summary>

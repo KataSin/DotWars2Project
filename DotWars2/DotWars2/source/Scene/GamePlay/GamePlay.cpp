@@ -1,5 +1,6 @@
 #include "GamePlay.h"
 #include "../../Actor/Player/Player.h"
+#include "../../Actor/EnemyPlayer/EnemyPlayer.h"
 #include "../../Actor/CameraActor/CameraActor.h"
 #include "../../Actor/Stage/Stage.h"
 
@@ -38,9 +39,12 @@ void GamePlay::Start()
 	//ゲームプレイワールドに追加
 	auto gamePlayWorld = mWorldManager->GetWorld(WORLD_ID::GAME_WORLD);
 	//プレイヤー
-	mPlayer = std::make_shared<Player>(*gamePlayWorld, Matrix4::Identity*Matrix4::Translate(Vector3::Up*20.0f));
+	mPlayer = std::make_shared<Player>(*gamePlayWorld, Matrix4::Identity*Matrix4::Translate(Vector3::Up*20.0f), (PLAYER_ID)mWorldManager->GetFirstState().playerNum);
 	//アクター追加
 	gamePlayWorld->Add(ACTOR_ID::PLAYER_ACTOR, mPlayer);
+
+	EnemyPlayerState enemyState;
+	gamePlayWorld->Add(ACTOR_ID::ENEMY_PLAYER_ACTOR, std::make_shared<EnemyPlayer>(*mGameWorld, enemyState));
 	gamePlayWorld->Add(ACTOR_ID::STAGE_ACTOR, std::make_shared<Stage>(*gamePlayWorld));
 
 	//アクタースタート
@@ -64,6 +68,15 @@ void GamePlay::Update()
 		mUDPManager->Send();
 	mUDPManager->Read();
 
+	for (const auto& i : mUDPManager->GetServerState().states) {
+		if (dynamic_cast<Player*>(mPlayer.get())->GetNetState().playerNum != i.playerNum&&i.playerNum != -1) {
+			EnemyPlayerState state;
+			state.id = (PLAYER_ID)i.playerNum;
+			state.pos = i.position;
+			dynamic_cast<EnemyPlayer*>(mWorldManager->GetWorld(WORLD_ID::GAME_WORLD)->FindActors(ACTOR_ID::ENEMY_PLAYER_ACTOR).front().get())->SetEnemyPlayerState(state);
+		}
+	}
+	mWorldManager->GetWorld(WORLD_ID::GAME_WORLD)->SetNetState(mUDPManager->GetServerState());
 
 	mWorldManager->Update();
 	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::SPACE)) {

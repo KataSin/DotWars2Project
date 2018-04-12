@@ -15,7 +15,7 @@
 #include "../../Utility/Input/Keyboard/Keyboard.h"
 #include "../../Time/Time.h"
 
-Player::Player(IWorld & world, const Matrix4 & mat) :
+Player::Player(IWorld & world, const Matrix4 & mat, PLAYER_ID id) :
 	Actor(world)
 {
 	//プレイヤーのカメラを追加
@@ -32,6 +32,8 @@ Player::Player(IWorld & world, const Matrix4 & mat) :
 		Matrix4::RotateY(0)*
 		Matrix4::RotateZ(0)*
 		Matrix4::Translate(mPosition);
+	//id設定
+	mParameter.playerID = id;
 	//アクションクラスを設定
 	mPlayerActionManager = new ActionManager(world, mParameter);
 	mPlayerActionManager->AddAction(ActionBehavior::IDLE, new PlayerIdle(this, world, *mPlayerActionManager, mParameter));
@@ -43,7 +45,7 @@ Player::Player(IWorld & world, const Matrix4 & mat) :
 
 	mState.frame = 0;
 	mState.playerNum = (int)mParameter.playerID;
-	mState.position = mPosition;
+	mState.position = mParameter.mat.GetPosition();
 
 
 	mVelo = Vector3::Zero;
@@ -73,7 +75,7 @@ void Player::Update()
 	mVelo.y -= 5.0f*Time::GetInstance().DeltaTime();
 
 	//サーバーに送る情報を設定
-	mState.position = mPosition;
+	mState.position = mParameter.mat.GetPosition();
 	mState.frame++;
 
 

@@ -1,5 +1,7 @@
 #include "EnemyPlayer.h"
 
+#include "../../Graphic/Model/Model.h"
+
 EnemyPlayer::EnemyPlayer(IWorld& world, const EnemyPlayerState& state) :
 	Actor(world)
 {
@@ -34,11 +36,12 @@ void EnemyPlayer::Update()
 
 void EnemyPlayer::Draw() const
 {
-
+	Model::GetInstance().Draw(MODEL_ID::PLAYER_MODEL, mParameter.mat);
 }
 
 void EnemyPlayer::Collision(Actor & other, const CollisionParameter & parameter)
 {
+	
 }
 
 void EnemyPlayer::SetEnemyPlayerState(const EnemyPlayerState & state)

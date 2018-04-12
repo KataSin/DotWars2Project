@@ -3,6 +3,7 @@
 #include "WorldID.h"
 #include "../Actor/CollisionActor/Collision/Collision.h"
 #include "../Actor/ActorID.h"
+#include "../NetWork/NetGameState.h"
 #include <list>
 class IWorld {
 public:
@@ -39,4 +40,14 @@ public:
 	/// ワールドをクリアー
 	/// </summary>
 	virtual void Clear() = 0;
+	/// <summary>
+	/// サーバーから送られてきた情報を設定
+	/// </summary>
+	/// <param name="state">情報</param>
+	virtual void SetNetState(const ServerToClientState& state) = 0;
+	/// <summary>
+	/// サーバーから送られてきた情報を取得
+	/// </summary>
+	virtual ServerToClientState GetNetState() = 0;
+
 };

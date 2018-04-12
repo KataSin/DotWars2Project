@@ -9,7 +9,7 @@ public:
 	/// </summary>
 	/// <param name="world">ワールド</param>
 	/// <param name="mat">マトリクス</param>
-	Player(IWorld& world, const Matrix4& mat);
+	Player(IWorld& world, const Matrix4& mat, PLAYER_ID id);
 	/// <summary>
 	/// デストラクタ
 	/// </summary>

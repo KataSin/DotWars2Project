@@ -4,6 +4,7 @@
 struct EnemyPlayerState {
 	Vector3 pos; //ポジション
 	int stateID;//状態ID
+	PLAYER_ID id;//プレイヤーのID
 };
 class EnemyPlayer :public Actor {
 public:

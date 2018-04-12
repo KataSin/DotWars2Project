@@ -72,3 +72,13 @@ void World::Clear()
 {
 	mActors.clear();
 }
+
+void World::SetNetState(const ServerToClientState & state)
+{
+	mServerToClientState = state;
+}
+
+ServerToClientState World::GetNetState()
+{
+	return mServerToClientState;
+}

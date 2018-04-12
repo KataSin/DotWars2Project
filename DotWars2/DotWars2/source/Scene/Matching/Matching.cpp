@@ -3,6 +3,7 @@
 Matching::Matching(WorldManagerPtr manager) :
 	mWorldManager(manager)
 {
+	mTCPManager = new TCPClientSocketManager();
 }
 
 Matching::~Matching()
@@ -11,6 +12,11 @@ Matching::~Matching()
 
 void Matching::Start()
 {
+	mStageNum = 0;
+	mMyScene = SceneID::MATCHING_SCENE;
+	mNextScene = SceneID::GAME_PLAY_SCENE;
+	mIsEnd = false;
+
 }
 
 void Matching::Update()

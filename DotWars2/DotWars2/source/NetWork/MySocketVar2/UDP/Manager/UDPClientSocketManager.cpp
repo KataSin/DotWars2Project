@@ -27,10 +27,10 @@ void UDPClientSocketManager::Send()
 	mSocket->Send(mServerAddr, mDotNetState);
 }
 
-ServerToClientState UDPClientSocketManager::GetState()
-{
-	return mServerToState;
-}
+//ServerToClientState UDPClientSocketManager::GetState()
+//{
+//	return mServerToState;
+//}
 
 void UDPClientSocketManager::Close()
 {
