@@ -16,6 +16,11 @@ bool Actor::GetIsDead() const
 	return mParameter.isDead;
 }
 
+Parameter& Actor::GetParameter()
+{
+	return mParameter;
+}
+
 Parameter Actor::GetParameter() const
 {
 	return mParameter;

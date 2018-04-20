@@ -5,6 +5,7 @@
 
 #include "../../NetWork/MySocketVar2/TCP/Manager/TCPClientSocketManager.h"
 #include "../../NetWork/MySocketVar2/UDP/Manager/UDPClientSocketManager.h"
+#include "../../NetWork/MySocketVar2/TCP/Manager/TCPServerSocketManager.h"
 
 #include <unordered_map>
 
@@ -68,7 +69,7 @@ public:
 	//ネットワーク系
 
 	/// <summary>
-	/// クライアントマネージャーを生成
+	/// クライアントマネージャーを設定
 	/// </summary>
 	void SetClientManager(TCPClientSocketManager* manager);
 	/// <summary>
@@ -76,6 +77,16 @@ public:
 	/// </summary>
 	/// <returns></returns>
 	TCPClientSocketManager* GetClientManager();
+	/// <summary>
+	/// サーバーマネージャーを設定
+	/// </summary>
+	/// <param name="manager"></param>
+	void SetServerManager(TCPServerSocketManager* manager);
+	/// <summary>
+	/// サーバーマネージャーを取得
+	/// </summary>
+	/// <returns></returns>
+	TCPServerSocketManager* GetServerManager();
 	/// <summary>
 	/// 最初の情報をセットする
 	/// </summary>
@@ -90,8 +101,10 @@ public:
 private:
 	std::unordered_map<WORLD_ID, WorldState> mWorlds;
 
-	//TCPマネージャー
-	TCPClientSocketManager* mTcpManager;
+	//TCPクライアントマネージャー
+	TCPClientSocketManager* mTcpClientManager;
+	//UDPサーバーマネージャー
+	TCPServerSocketManager* mTcpServerManager;
 	//最初の情報
 	FirstToClientState mFirstState;
 };

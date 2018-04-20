@@ -61,24 +61,9 @@ void Server::Update()
 	case 3: {
 		debug = "TCP終了";
 		mTCPManager->Close();
-		//UDP通信開始
-		mUDPManager = new UDPServerSocketManager();
-		//TCPで取ったクライアントの情報をUDPに渡す
-		for (const auto& i : mTCPManager->GetConnectSockets()) {
-			mUDPManager->AddClientAdd(i);
-		}
-		//状態を初期化
-		mUDPManager->SetState(mTCPManager->GetFirstState());
-		mStageNum++;
-		break;
-	}
-	case 4: {
-		mUDPManager->Read();
-		ServerToClientState s = mUDPManager->GetState();
-		debug = "Player1 PosX:" + std::to_string(s.states[0].position.x) + "PosY" + std::to_string(s.states[0].position.y) +
-			"Player2 PosX:" + std::to_string(s.states[1].position.x) + "PosY" + std::to_string(s.states[1].position.y);
-		if (serverCount % 15 == 0)
-			mUDPManager->Send();
+		mWorldManager->SetServerManager(mTCPManager);
+		mNextScene = SceneID::GAME_PLAY_SERVER_SCENE;
+		mIsEnd = true;
 		break;
 	}
 	}
@@ -93,6 +78,4 @@ void Server::Draw() const
 
 void Server::End()
 {
-	delete mUDPManager;
-	delete mTCPManager;
 }

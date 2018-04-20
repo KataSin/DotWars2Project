@@ -32,6 +32,11 @@ public:
 	/// <param name="other">当たったオブジェクト</param>
 	virtual void Collision(Actor& other, const CollisionParameter& parameter)override;
 
+
+
+	void SetHp(int hp) {
+		mPlateHp = hp;
+	}
 private:
 	//リスポーン時間
 	float mRespawnTime;

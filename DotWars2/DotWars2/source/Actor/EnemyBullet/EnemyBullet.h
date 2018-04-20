@@ -1,27 +1,20 @@
 #pragma once
 #include "../Actor.h"
 
-class PlayerBullet :public Actor {
+#include "../PlayerBullet/PlayerBullet.h"
 
-public: 
-	struct BulletState {
-		PLAYER_ID playerID;  //誰が打ったか
-		Vector3 spawnPos;	//出現する座標
-		Vector3 vec;		//弾の発射ベクトル
-	};
-
-
+class EnemyBullet :public Actor {
 public:
 	/// <summary>
 	/// コンストラクタ
 	/// </summary>
 	/// <param name="world">ワールド</param>
 	/// <param name="state">弾の情報</param>
-	PlayerBullet(IWorld& world, const BulletState& state);
+	EnemyBullet(IWorld& world, const PlayerBullet::BulletState& state);
 	/// <summary>
 	/// デストラクタ
 	/// </summary>
-	virtual ~PlayerBullet()override;
+	virtual ~EnemyBullet()override;
 	/// <summary>
 	/// スタート
 	/// </summary>
@@ -39,6 +32,11 @@ public:
 	/// </summary>
 	/// <param name="other">当たったオブジェクト</param>
 	virtual void Collision(Actor& other, const CollisionParameter& parameter)override;
+
+	void SetPosition(const Vector3& pos) {
+		mPosition = pos;
+	}
+
 private:
 	//ベクトル
 	Vector3 mVec;

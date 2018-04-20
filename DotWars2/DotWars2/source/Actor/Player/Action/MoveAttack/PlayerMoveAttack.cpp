@@ -1,6 +1,7 @@
 #include "PlayerMoveAttack.h"
 #include "../../ActionManager/ActionManager.h"
 #include "../../../../Utility/Input/Keyboard/Keyboard.h"
+#include "../../../../Random/Random.h"
 
 #include "../../../../Graphic/ModelAnim/ModelAnim.h"
 
@@ -13,6 +14,8 @@
 const float ATTACK_MOVE_SPEED = 60.0f;
 //UŒ‚‚·‚éŠÔŠu
 const float ATTACK_BULLET_TIME = 0.1f;
+//’e‚Ì‚Î‚ç‚¯‹ï‡
+const Vector3 ATTCK_BULLET_RAND = Vector3(5.0f, 5.0f, 5.0f);
 PlayerMoveAttack::PlayerMoveAttack(Actor* actor, IWorld & world, IActionManager & actionManager, Parameter & parameter) :
 	Action(actor, world, actionManager, parameter)
 {
@@ -80,17 +83,25 @@ void PlayerMoveAttack::Update()
 
 	//UŒ‚
 	mAttackTime += Time::GetInstance().DeltaTime();
+	//ƒT[ƒo[‚É‘—‚éî•ñƒZƒbƒg
+	mPlayerActor->GetParameter().state.attackVec = NetVec3(999,999,999);
 	if (mAttackTime >= ATTACK_BULLET_TIME) {
+		//’e‚Ìî•ñ‚ð‹‚ß‚é
 		PlayerBullet::BulletState state;
-		//’eÝ’è
+		Vector3 vertexPos = mVertexPos->GetParameter().mat.GetPosition();
 		state.playerID = mParameter.playerID;
-		state.vertexPos = mVertexPos->GetParameter().mat.GetPosition();
 		state.spawnPos = mParameter.mat.GetPosition();
-
-
-		state.rand = Vector3::One;
-
-		mWorld.Add(ACTOR_ID::PLAYER_BULLET_ACTOR, std::make_shared<PlayerBullet>(mWorld, state));
+		Vector3 randVec = Vector3(
+			Random::GetInstance().Range(-ATTCK_BULLET_RAND.x, ATTCK_BULLET_RAND.x),
+			Random::GetInstance().Range(-ATTCK_BULLET_RAND.y + 0.5f, ATTCK_BULLET_RAND.y - 0.5f),
+			Random::GetInstance().Range(-ATTCK_BULLET_RAND.z, ATTCK_BULLET_RAND.z));
+		Vector3 vec = ((vertexPos - state.spawnPos).Normalized()*1000.0f) + randVec;
+		//’eî•ñÝ’è
+		state.vec = vec;
+		//ƒT[ƒo[‚É‘—‚éî•ñ‚ðã‘‚«‚·‚é
+		mPlayerActor->GetParameter().state.attackVec = NetVec3::ToNetVec3(vec);
+		////Œ©‚¹‚©‚¯‚Ì’e‚ð’Ç‰Á
+		//mWorld.Add(ACTOR_ID::PLAYER_BULLET_ACTOR, std::make_shared<PlayerBullet>(mWorld, state));
 
 		mAttackTime = 0.0f;
 	}

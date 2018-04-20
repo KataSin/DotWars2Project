@@ -245,6 +245,7 @@ Vector3& Vector3::operator = (const VECTOR& v){
 	return *this;
 }
 
+
 Vector3& Vector3::operator = (const Vector3& v)
 {
 	x = v.x;

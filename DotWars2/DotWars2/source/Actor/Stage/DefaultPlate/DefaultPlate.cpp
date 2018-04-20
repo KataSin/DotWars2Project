@@ -11,6 +11,8 @@ DefaultPlate::DefaultPlate(IWorld & world, const Matrix4 & mat) :
 {
 	mParameter.mat = mat;
 	mParameter.isDead = false;
+	
+	
 	//HP‚ğİ’è
 	mPlateHp = HP;
 	mIsBreak = false;
@@ -30,9 +32,12 @@ void DefaultPlate::Update()
 	if (mPlateHp <= 0) {
 		mIsBreak = true;
 	}
+	else
+		mIsBreak = false;
+
 	if (!mIsBreak) {
 		mWorld.Collision(ACTOR_ID::PLAYER_ACTOR, COL_ID::PLAYER_PLATE_COL, *this);
-		mWorld.Collision(ACTOR_ID::PLAYER_BULLET_ACTOR, COL_ID::PLATE_BULLET_COL, *this);
+		//mWorld.Collision(ACTOR_ID::PLAYER_BULLET_ACTOR, COL_ID::PLATE_BULLET_COL, *this);
 
 	}
 
@@ -47,7 +52,7 @@ void DefaultPlate::Draw() const
 
 void DefaultPlate::Collision(Actor & other, const CollisionParameter & parameter)
 {
-	if (parameter.colID == COL_ID::PLATE_BULLET_COL) {
-		mPlateHp--;
-	}
+	//if (parameter.colID == COL_ID::PLATE_BULLET_COL) {
+	//	mPlateHp--;
+	//}
 }

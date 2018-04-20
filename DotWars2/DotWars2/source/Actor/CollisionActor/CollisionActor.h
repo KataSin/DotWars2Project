@@ -29,6 +29,13 @@ public:
 	/// <param name="actor2">プレート</param>
 	/// <returns></returns>
 	static CollisionParameter Plate_Bullet_Col(const Actor & actor1, const Actor & actor2);
+	///// <summary>
+	///// プレイヤーと
+	///// </summary>
+	///// <param name="actor1">弾</param>
+	///// <param name="actor2">プレート</param>
+	///// <returns></returns>
+	//static CollisionParameter Plate_Bullet_Col(const Actor & actor1, const Actor & actor2);
 
 
 

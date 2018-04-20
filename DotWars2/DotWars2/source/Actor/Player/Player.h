@@ -45,11 +45,6 @@ public:
 	/// </summary>
 	/// <param name="velocity"></param>
 	void SetVeloY(float velocityY);
-	/// <summary>
-	/// サーバーに送る情報を取得
-	/// </summary>
-	/// <returns>情報</returns>
-	DotWarsNet GetNetState();
 private:
 	Vector3 mPosition;
 
@@ -57,7 +52,5 @@ private:
 	Vector3 mVelo;
 	//アクションマネージャー
 	ActionManager* mPlayerActionManager;
-	//サーバーに送る情報
-	DotWarsNet mState;
 
 };

@@ -1,13 +1,15 @@
-#include "PlayerBullet.h"
+#include "EnemyBullet.h"
 
 #include "../../Graphic/Model/Model.h"
+
+
 
 #include "../../Random/Random.h"
 #include "../../Time/Time.h"
 
 const float BULLET_SPEED = 0.01f;
 
-PlayerBullet::PlayerBullet(IWorld& world, const BulletState& state) :
+EnemyBullet::EnemyBullet(IWorld& world, const PlayerBullet::BulletState& state) :
 	Actor(world)
 {
 	//パラメーター初期化
@@ -49,21 +51,21 @@ PlayerBullet::PlayerBullet(IWorld& world, const BulletState& state) :
 	mTime = 0.0f;
 }
 
-PlayerBullet::~PlayerBullet()
+EnemyBullet::~EnemyBullet()
 {
 }
 
-void PlayerBullet::Start()
+void EnemyBullet::Start()
 {
 }
 
-void PlayerBullet::Update()
+void EnemyBullet::Update()
 {
-	//タイム加算
-	mTime += Time::GetInstance().DeltaTime();
+	////タイム加算
+	//mTime += Time::GetInstance().DeltaTime();
 
-	mVec.y -=2000.0f*Time::GetInstance().DeltaTime();
-	mPosition += mVec*Time::GetInstance().DeltaTime();
+	//mVec.y -=2000.0f*Time::GetInstance().DeltaTime();
+	//mPosition += mVec*Time::GetInstance().DeltaTime();
 	////頂点が出現位置よりも高かったら(頂点と出現位置の引き算がマイナスになり平方根で求められなくなるため)
 	//if (mCoppyPosY <= mVertexPoint.y)
 	//{
@@ -91,10 +93,10 @@ void PlayerBullet::Update()
 	//}
 	mRotate += mRandRotate*Time::GetInstance().DeltaTime();
 
-	//テスト
-	if (mTime >= 2.0f) {
-		mParameter.isDead = true;
-	}
+	////テスト
+	//if (mTime >= 2.0f) {
+	//	mParameter.isDead = true;
+	//}
 
 	mParameter.mat =
 		Matrix4::Scale(1.0f)*
@@ -104,14 +106,14 @@ void PlayerBullet::Update()
 		Matrix4::Translate(mPosition);
 }
 
-void PlayerBullet::Draw() const
+void EnemyBullet::Draw() const
 {
 	Model::GetInstance().Draw(MODEL_ID::PLAYER_BULLET_MODEL, mParameter.mat);
 }
 
-void PlayerBullet::Collision(Actor & other, const CollisionParameter & parameter)
+void EnemyBullet::Collision(Actor & other, const CollisionParameter & parameter)
 {
-	if (parameter.colID == COL_ID::PLATE_BULLET_COL){
-		mParameter.isDead = true;
-	}
+	//if (parameter.colID == COL_ID::PLATE_BULLET_COL){
+	//	mParameter.isDead = true;
+	//}
 }

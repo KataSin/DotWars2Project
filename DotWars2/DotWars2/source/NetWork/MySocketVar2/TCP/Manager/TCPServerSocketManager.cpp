@@ -4,19 +4,19 @@ TCPServerSocketManager::TCPServerSocketManager()
 {
 	mSocket = std::make_shared<TCPServerSocket>();
 	mSocket->CreateSocket();
-	mSocket->BindSocket("127.0.0.1", 1234567);
+	mSocket->BindSocket("192.168.100.144", 1234567);
 
 	//送る情報を設定
 	{
 		FirstToClientState state;
 		state.playerNum = 1;
-		state.position = Vector3(100, 100, 100);
+		state.position = NetVec3::ToNetVec3(Vector3(100, 100, 100));
 		mToClientState.push_back(state);
 	}
 	{
 		FirstToClientState state;
 		state.playerNum = 2;
-		state.position = Vector3(200, 200, 200);
+		state.position = NetVec3::ToNetVec3(Vector3(200, 200, 200));
 		mToClientState.push_back(state);
 	}
 }
@@ -36,6 +36,10 @@ bool TCPServerSocketManager::Listen(int listenNum)
 
 bool TCPServerSocketManager::Accept()
 {
+	//デバッグ用
+	std::string text = "人数:" + std::to_string(mClientSockets.size());
+	DrawString(0, 128, text.c_str(), GetColor(255, 255, 255));
+
 	if (mClientSockets.size() >= mPlayerNum) {
 		return true;
 	}
@@ -57,7 +61,7 @@ bool TCPServerSocketManager::Send()
 	for (int i = 0; i <= mClientSockets.size() - 1; i++) {
 		const SOCKET clientSocket = mClientSockets[i]->GetSocket();
 		FirstToClientState state = mToClientState[i];
-		
+
 		mServerToState.states[i].playerNum = mToClientState[i].playerNum;
 		mServerToState.states[i].position = mToClientState[i].position;
 

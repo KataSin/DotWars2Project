@@ -12,11 +12,19 @@ Stage::Stage(IWorld & world) :
 	mParameter.isDead = false;
 
 
-	for (int i = -STAGE_SIZE / 2; i < STAGE_SIZE/2; i++) {
-		for (int j = -STAGE_SIZE / 2; j < STAGE_SIZE/2; j++) {
+
+	int indexY = 0;
+	for (int i = -STAGE_SIZE / 2; i < STAGE_SIZE / 2; i++) {
+		int indexX = 0;
+		for (int j = -STAGE_SIZE / 2; j < STAGE_SIZE / 2; j++) {
 			Matrix4 mat = Matrix4::Translate(Vector3(i * 100, 0, j * 100));
-			world.Add(ACTOR_ID::DEFAULT_PLATE_ACTOR, std::make_shared<DefaultPlate>(world, mat));
+			auto plate = std::make_shared<DefaultPlate>(world, mat);
+			world.Add(ACTOR_ID::DEFAULT_PLATE_ACTOR, plate);
+			mPlates[indexY][indexX] = plate;
+
+			indexX++;
 		}
+		indexY++;
 	}
 
 }
@@ -45,13 +53,4 @@ void Stage::Draw() const
 
 void Stage::Collision(Actor & other, const CollisionParameter & parameter)
 {
-}
-
-void Stage::PlateSpawn()
-{
-	for (int i = 0; i <= 30; i++) {
-		for (int j = 0; j <= 30; j++) {
-
-		}
-	}
 }

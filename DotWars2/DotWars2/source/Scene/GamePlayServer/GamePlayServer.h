@@ -3,12 +3,16 @@
 #include "../../IncludePtr.h"
 #include "../../World/WorldManager/WorldManager.h"
 
-#include "../../NetWork/MySocketVar2/UDP/Manager/UDPClientSocketManager.h"
-class GamePlay :public Scene
+#include "../../NetWork/ServerCollision/ServerCollision.h"
+
+//先行宣言
+class UDPServerSocketManager;
+
+class GamePlayServer :public Scene
 {
 public:
-	GamePlay(WorldManagerPtr manager);
-	virtual ~GamePlay() override;
+	GamePlayServer(WorldManagerPtr manager);
+	virtual ~GamePlayServer() override;
 	/// <summary>
 	/// シーンスタート
 	/// </summary>
@@ -25,22 +29,15 @@ public:
 	/// 終了処理
 	/// </summary>
 	virtual void End() override;
-
 private:
-	/// <summary>
-	/// ネットワークアップデート
-	/// </summary>
-	void NetWorkUpdate();
-
-private:
+	//UDPマネージャー
+	UDPServerSocketManager* mUDPManager;
+	
+	ServerCollision* mServerCollision;
+	
 	WorldManagerPtr mWorldManager;
-	WorldPtr mGameWorld;
-
-	//プレイヤー
-	ActorPtr mPlayer;
-	//udpマネージャー
-	UDPClientSocketManager* mUDPManager;
 
 	//テスト
+	std::string debug;
 	int serverCount;
 };

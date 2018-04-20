@@ -15,6 +15,10 @@ struct Parameter {
 	Matrix4 mat;
 	//死んでいるか
 	bool isDead;
+
+	//送る情報(プレイヤー限定)
+	DotWarsNet state;
+
 };
 
 class Actor {
@@ -51,9 +55,14 @@ public:
 	/// <returns>死んでいるかフラグ</returns>
 	bool GetIsDead()const;
 	/// <summary>
-	/// パラメーターを取得
+	/// パラメーターを取得(参照版)
 	/// </summary>
 	/// <returns>パラメーター</returns>
+	Parameter& GetParameter();
+	/// <summary>
+	/// パラメーターを取得(const版)
+	/// </summary>
+	/// <returns></returns>
 	Parameter GetParameter() const;
 protected:
 	Parameter mParameter;

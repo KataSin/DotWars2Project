@@ -33,9 +33,10 @@ public:
 	virtual void Collision(Actor& other, const CollisionParameter& parameter)override;
 
 
-	//ステージプレート生成
-	void PlateSpawn();
 private:
 	//廻のステージのマトリクス
 	Matrix4 mStageMat;
+
+public:
+	ActorPtr mPlates[16][16];
 };

@@ -43,10 +43,9 @@ Player::Player(IWorld & world, const Matrix4 & mat, PLAYER_ID id) :
 	//アクションを待機に設定
 	mPlayerActionManager->ChangeAction(ActionBehavior::IDLE);
 
-	mState.frame = 0;
-	mState.playerNum = (int)mParameter.playerID;
-	mState.position = mParameter.mat.GetPosition();
-
+	mParameter.state.frame = 0;
+	mParameter.state.playerNum = (int)mParameter.playerID;
+	mParameter.state.position = NetVec3::ToNetVec3(mParameter.mat.GetPosition());
 
 	mVelo = Vector3::Zero;
 }
@@ -74,11 +73,9 @@ void Player::Update()
 	mVelo.y = Math::Clamp(mVelo.y, -10.0f, 1000.0f);
 	mVelo.y -= 5.0f*Time::GetInstance().DeltaTime();
 
-	//サーバーに送る情報を設定
-	mState.position = mParameter.mat.GetPosition();
-	mState.frame++;
-
-
+	mParameter.state.position= NetVec3::ToNetVec3(mParameter.mat.GetPosition());
+	
+	mParameter.state.frame++;
 }
 
 void Player::Draw() const
@@ -106,7 +103,3 @@ void Player::SetVeloY(float velocityY)
 	mVelo.y = velocityY;
 }
 
-DotWarsNet Player::GetNetState()
-{
-	return mState;
-}

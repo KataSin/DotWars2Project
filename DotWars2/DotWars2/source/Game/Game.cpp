@@ -9,6 +9,7 @@
 #include "../Scene/GamePlay/GamePlay.h"
 #include "../Scene/Matching/Matching.h"
 #include "../Scene/Server/Server.h"
+#include "../Scene/GamePlayServer/GamePlayServer.h"
 //その他
 #include "../Time/Time.h"
 #include "../Utility/Input/Keyboard/Keyboard.h"
@@ -46,6 +47,7 @@ void Game::Start()
 	mSceneManager->AddScene(SceneID::GAME_PLAY_SCENE, std::make_shared<GamePlay>(mWorldManager));
 	mSceneManager->AddScene(SceneID::MATCHING_SCENE, std::make_shared<Matching>(mWorldManager));
 	mSceneManager->AddScene(SceneID::SERVER_SCENE, std::make_shared<Server>(mWorldManager));
+	mSceneManager->AddScene(SceneID::GAME_PLAY_SERVER_SCENE, std::make_shared<GamePlayServer>(mWorldManager));
 
 	
 	//最初のシーン
@@ -107,7 +109,7 @@ void Game::Update()
 	//	{
 	//	case 0: {
 	//		debug = "サーバーに接続中";
-	//		if (mClientManager->Connect("127.0.0.1", 1234567))
+	//		if (mClientManager->Connect("192.168.100.144", 1234567))
 	//			stageNum++;
 	//		break;
 	//	}

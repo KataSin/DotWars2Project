@@ -3,7 +3,7 @@
 Matching::Matching(WorldManagerPtr manager) :
 	mWorldManager(manager)
 {
-	mTCPManager = new TCPClientSocketManager();
+
 }
 
 Matching::~Matching()
@@ -16,7 +16,7 @@ void Matching::Start()
 	mMyScene = SceneID::MATCHING_SCENE;
 	mNextScene = SceneID::GAME_PLAY_SCENE;
 	mIsEnd = false;
-
+	mTCPManager = new TCPClientSocketManager();
 }
 
 void Matching::Update()
@@ -25,7 +25,7 @@ void Matching::Update()
 	{
 	case 0: {
 		debug = "サーバーに接続中";
-		if (mTCPManager->Connect("127.0.0.1", 1234567))
+		if (mTCPManager->Connect("192.168.100.144", 1234567))
 			mStageNum++;
 		break;
 	}
