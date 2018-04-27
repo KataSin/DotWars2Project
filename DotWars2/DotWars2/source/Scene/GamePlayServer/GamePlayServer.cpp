@@ -38,9 +38,12 @@ void GamePlayServer::Update()
 	serverCount++;
 	mUDPManager->Read();
 	ServerToClientState clientStates = mUDPManager->GetState();
-	mServerCollision->CollisionCheck(mWorldManager->GetWorld(WORLD_ID::GAME_WORLD),clientStates);
-
-
+	mServerCollision->CollisionCheck(mWorldManager->GetWorld(WORLD_ID::GAME_WORLD), mUDPManager->GetState());
+	bulletPos.clear();
+	for (auto i : clientStates.bulletPos) {
+		if (i.x == 0 && i.y == 0 && i.z == 0)continue;
+		bulletPos.push_back("x:" + std::to_string(i.x) + "y:" + std::to_string(i.y) + "z:" + std::to_string(i.z));
+	}
 	debug = "Player1 PosX:" + std::to_string(clientStates.states[0].position.x) + "PosY" + std::to_string(clientStates.states[0].position.y) +
 		"Player2 PosX:" + std::to_string(clientStates.states[1].position.x) + "PosY" + std::to_string(clientStates.states[1].position.y);
 	if (serverCount % 3 == 0)
@@ -52,7 +55,11 @@ void GamePlayServer::Draw() const
 {
 	std::string text = "ゲームプレイサーバー";
 	DrawString(0, 0, text.c_str(), GetColor(255, 255, 255));
-
+	int count =0;
+	for (const auto& i : bulletPos) {
+		DrawString(0, 128 + 32 * count, i.c_str(), GetColor(255, 255, 255));
+		count++;
+	}
 	DrawString(0, 64, debug.c_str(), GetColor(255, 255, 255));
 }
 

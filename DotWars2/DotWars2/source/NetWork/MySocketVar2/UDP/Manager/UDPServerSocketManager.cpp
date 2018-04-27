@@ -41,7 +41,7 @@ void UDPServerSocketManager::Send()
 	}
 }
 
-ServerToClientState UDPServerSocketManager::GetState()
+ServerToClientState& UDPServerSocketManager::GetState()
 {
 	return mServerState;
 }

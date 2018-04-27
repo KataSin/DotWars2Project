@@ -63,7 +63,7 @@ void Player::Update()
 {
 	mWorld.Collision(ACTOR_ID::ENEMY_ACTOR, COL_ID::PLAYER_ENEMY_COL, *this);
 
-
+	mParameter.state.attackVec = NetVec3(0, 0, 0);
 	//アクションアップデート
 	mPlayerActionManager->Update();
 

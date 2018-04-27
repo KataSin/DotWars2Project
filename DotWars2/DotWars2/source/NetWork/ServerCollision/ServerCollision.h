@@ -13,7 +13,7 @@ struct NetBulletState {
 //プレート情報
 struct PlateState {
 	Vector3 position;
-	int hp;
+	short int hp;
 };
 //サーバー側でコリジョン判定をするためのクラス
 class ServerCollision {

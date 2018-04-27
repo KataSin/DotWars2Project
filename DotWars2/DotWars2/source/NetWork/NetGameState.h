@@ -12,7 +12,7 @@ struct DotWarsNet
 	short int playerNum = -1;		//どのプレイヤーか
 	unsigned int frame = 0;			//どのフレーム数か
 	NetVec3 position;				//プレイヤーの座標(テスト)
-	NetVec3 attackVec;				//球が飛ぶベクトル(攻撃中でなければ(999,999,999)が入る)
+	NetVec3 attackVec;				//球が飛ぶベクトル(攻撃中でなければ(0,0,0)が入る)
 };
 //サーバーがクライアントに送る情報
 struct ServerToClientState
@@ -21,7 +21,7 @@ struct ServerToClientState
 	short int playerNum = -1;					//受け取るプレイヤー番号
 	short int playerHp = 0;						//プレイヤーHP
 	DotWarsNet states[4];						//プレイヤーの状態コンテナ
-	char stagePlates[16][16];					//ステージのプレートHP
+	short int stagePlates[16][16];					//ステージのプレートHP
 	NetVec3 bulletPos[32];						//敵弾の座標
 };
 

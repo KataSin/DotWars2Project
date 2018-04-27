@@ -39,5 +39,8 @@ private:
 
 	//ƒeƒXƒg
 	std::string debug;
+
+
+	std::vector<std::string> bulletPos;
 	int serverCount;
 };

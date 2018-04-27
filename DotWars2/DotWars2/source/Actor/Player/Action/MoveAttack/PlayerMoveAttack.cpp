@@ -84,7 +84,7 @@ void PlayerMoveAttack::Update()
 	//攻撃
 	mAttackTime += Time::GetInstance().DeltaTime();
 	//サーバーに送る情報セット
-	mPlayerActor->GetParameter().state.attackVec = NetVec3(999,999,999);
+	mPlayerActor->GetParameter().state.attackVec = NetVec3(0,0,0);
 	if (mAttackTime >= ATTACK_BULLET_TIME) {
 		//弾の情報を求める
 		PlayerBullet::BulletState state;

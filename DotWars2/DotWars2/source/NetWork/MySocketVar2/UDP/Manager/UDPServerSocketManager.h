@@ -30,7 +30,7 @@ public:
 	/// 情報を取得する
 	/// </summary>
 	/// <returns></returns>
-	ServerToClientState GetState();
+	ServerToClientState& GetState();
 	/// <summary>
 	/// サーバー情報をセットする
 	/// </summary>

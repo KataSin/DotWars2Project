@@ -4,7 +4,7 @@ TCPServerSocketManager::TCPServerSocketManager()
 {
 	mSocket = std::make_shared<TCPServerSocket>();
 	mSocket->CreateSocket();
-	mSocket->BindSocket("192.168.100.144", 1234567);
+	mSocket->BindSocket("127.0.0.1", 1234567);
 
 	//‘—‚éî•ñ‚ğİ’è
 	{

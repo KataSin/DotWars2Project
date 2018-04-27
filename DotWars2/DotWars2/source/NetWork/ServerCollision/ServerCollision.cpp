@@ -27,18 +27,22 @@ ServerCollision::~ServerCollision()
 
 void ServerCollision::CollisionCheck(WorldPtr world, ServerToClientState & state)
 {
-	for (const auto& i : state.states) {
+	for (auto& i : state.states) {
 		//オペレータ追加していないため
-		if (NetVec3::ToVector3(i.attackVec) != NetVec3::ToVector3(NetVec3(999, 999, 999))) {
+		if (i.attackVec.x != 0 &&
+			i.attackVec.y != 0 &&
+			i.attackVec.z != 0) {
 			PlayerBullet::BulletState bulletState;
 			bulletState.spawnPos = NetVec3::ToVector3(i.position);
 			bulletState.vec = NetVec3::ToVector3(i.attackVec);
 			world->Add(ACTOR_ID::ENEMY_BULLET_ACTOR, std::make_shared<EnemyBullet>(*world, bulletState));
+			//0,0,0に初期化
+			i.attackVec = NetVec3(0, 0, 0);
 		}
 	}
 	//弾とステージのあたり判定チェック
 	const auto & bullets = world->FindActors(ACTOR_ID::ENEMY_BULLET_ACTOR);
-	char returnPlate[16][16];
+
 	for (auto& bullet : bullets) {
 
 		for (int i = 0; i <= 15; i++) {
@@ -77,7 +81,7 @@ void ServerCollision::CollisionCheck(WorldPtr world, ServerToClientState & state
 	}
 	//設定されなかった奴ら
 	for (int i = count; i <= 31; i++) {
-		state.bulletPos[i] = NetVec3(999, 999, 999);
+		state.bulletPos[i] = NetVec3(0, 0, 0);
 	}
 
 }

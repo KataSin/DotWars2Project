@@ -62,8 +62,9 @@ void GamePlay::Start()
 
 void GamePlay::Update()
 {
-	NetWorkUpdate();
+
 	mWorldManager->Update();
+	NetWorkUpdate();
 	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::SPACE)) {
 		//mIsEnd = true;
 	}

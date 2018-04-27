@@ -109,7 +109,7 @@ void Game::Update()
 	//	{
 	//	case 0: {
 	//		debug = "サーバーに接続中";
-	//		if (mClientManager->Connect("192.168.100.144", 1234567))
+	//		if (mClientManager->Connect("127.0.0.1", 1234567))
 	//			stageNum++;
 	//		break;
 	//	}
